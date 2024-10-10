@@ -32,7 +32,7 @@ void tarjan(int root, int u) {
         if(!dfn[v]) {
             tarjan(root, v);
             low[u] = min(low[u], low[v]);
-            if (low[v] >= dfn[u]) {
+            if (dfn[u] <= low[v]) {
                 cnt ++ ; //割点,使下面不连通
             }
         } else {
