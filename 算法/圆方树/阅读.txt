@@ -9,3 +9,6 @@
 映射原问题到圆方树 (注意不同的点)
 
 */
+
+
+普通圆方树和广义圆方树: https://www.acwing.com/blog/content/29237/
