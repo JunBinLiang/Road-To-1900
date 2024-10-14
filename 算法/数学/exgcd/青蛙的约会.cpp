@@ -45,7 +45,7 @@ long long exgcd(long long a, long long b, long long &x, long long &y) {
 可以看成位置小的那个点是从0点 出发
 d = y - x （x追y的距离）
 
-简化
+简化 (这里正负值不太重要，可以自己验证一下)
 (n - m)t + kL = d
 
 
