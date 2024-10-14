@@ -17,4 +17,4 @@
   4.得到方程的通解。
   对于已得到的一组解x1, y1，不妨设x=x1+kt，代入方程中解得y=y1-ak/bt。此时，我们要保证ak/b是整数，自然会想到如何约去这个b。不妨令k=b/gcd(a, b)，这样x=x1+bt/gcd(a, b)，y=y1+at/gcd(a, b)便是原方程的通解公式。
 
-  练习: 洛谷P1082
+  练习: 洛谷P1082， https://blog.csdn.net/zhjchengfeng5/article/details/7786595
