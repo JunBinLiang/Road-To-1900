@@ -2,6 +2,7 @@
   阅读：
   https://ksmeow.moe/euclid/ (简单)
   https://blog.csdn.net/weixin_43872728/article/details/107289833 （通解可同时看这里）
+  https://www.acwing.com/blog/content/45707/ （通解可同时看这里）
   https://blog.csdn.net/u014634338/article/details/40210435 (gcd证明可看这里)
 
   扩展欧几里得算法是用于解决形如ax+by=d（a, b, d是整常数，x, y是整数）的不定方程的求整数解的问题的一种方法。
