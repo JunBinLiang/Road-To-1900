@@ -61,7 +61,6 @@ void solve() {
     long long d = y - x;
     long long a = n - m, b = L; //-1, 5
     long long g = exgcd(a, b, x0, y0);
-    //cout << a << " "  << b << endl;
     if(d % g != 0) {
         cout << "Impossible" << endl;
     } else {
