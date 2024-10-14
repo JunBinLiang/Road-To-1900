@@ -1,3 +1,5 @@
 扩展欧几里得算法:
   阅读：
+  https://ksmeow.moe/euclid/ (简单)
+  https://blog.csdn.net/u014634338/article/details/40210435 (证明)
   练习: acw877, acw878, acw204
