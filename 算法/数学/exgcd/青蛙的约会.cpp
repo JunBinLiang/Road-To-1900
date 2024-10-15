@@ -29,8 +29,8 @@ long long exgcd(long long a, long long b, long long &x, long long &y) {
         y = 0;
         return a;
     }
-    int ans = exgcd(b, a % b, x, y);
-    int t = x; // 将x2, y2换算成x1, y1
+    long long ans = exgcd(b, a % b, x, y);
+    long long t = x; // 将x2, y2换算成x1, y1
     x = y;
     y = t - a / b * y;
     //cout << "exgcd " << a << " " << b << "  " << x << " "  << y << "     |" << a * x + b * y << endl;
