@@ -17,7 +17,7 @@ using ll = long long;
 using ull = unsigned long long;
 #define FOR(i, a, b) for (int i = a; i < b; ++i)
 
-const int N = 1e5 + 10;
+const int N = 2e5 + 10;
 int n, m;
 int a[N], ans[N];
 vector<pair<int, int>> b; 
@@ -26,14 +26,10 @@ struct Query {
     int l, r, k, i;
 } q[N], q1[N], q2[N];
 
-int get(vector<int>& p, int l, int r) {
-    return p[r] - p[l - 1];
-}
-
 //整体二分，对多个query 同时进行二分
 //每个query 最多会被分割在O(log n)个range 里
 //Fenwick Tree
-const int FENWICK_SIZE = 100000 + 100;
+const int FENWICK_SIZE = 200000 + 100;
 struct Fenwick {
   int tree[FENWICK_SIZE];
   int sz;
@@ -130,7 +126,7 @@ void solve() {
         q[i].i = i;
     }
 
-    tr.init(100000 + 50);
+    tr.init(200000 + 50);
     sort(b.begin(), b.end());
     dfs(-1000000000, 1000000000, 0, m - 1);
 
