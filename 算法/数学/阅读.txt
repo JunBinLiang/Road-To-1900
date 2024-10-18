@@ -29,4 +29,7 @@
 卡特兰数：
   阅读:
   https://codeforces.com/blog/entry/87585
+  (解决方法是把它转化成另外的等价问题)
+
   C(n) = C(n - 1) * (4n - 2) / (n + 1). C(0) = 1
+  练习: CSES Bracket Sequences I, CSES Bracket Sequences II
