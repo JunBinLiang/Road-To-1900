@@ -100,3 +100,15 @@ namespace SegmentTreeRangeAdd {
         }
     }
 }
+
+namespace Combination {
+    long long fpow(long long x, int y){
+    	long long res = 1;
+    	while(y){
+    		if(y & 1) res = (res * x) % MOD;
+    		x = (x * x) % MOD;
+    		y >>= 1;
+    	}
+	    return res;
+    } 
+}
