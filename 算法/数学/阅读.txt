@@ -29,3 +29,4 @@
 卡特兰数：
   阅读:
   https://codeforces.com/blog/entry/87585
+  C(n) = C(n - 1) * (4n - 2) / (n + 1). C(0) = 1
