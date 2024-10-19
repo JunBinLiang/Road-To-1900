@@ -149,9 +149,9 @@ void solve() {
 
 int main(){
     int t = 1;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
     cin >> t;
-    //ios::sync_with_stdio(false);
-    //cin.tie(nullptr), cout.tie(nullptr);
     while(t--) {
         solve();
     }
