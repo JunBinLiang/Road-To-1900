@@ -130,5 +130,14 @@ namespace Combination {
 }
 
 namespace Graph {
+    struct E {
+        int v, w, ei;
+    };
+    vector<E> g1[N];
+    int ei = 0;
 
+    void add(vector<E> g[N], int u, int v, int w) {
+        g[u].push_back({v, w, ei++});
+        g[v].push_back({u, w, ei++});
+    }
 }
