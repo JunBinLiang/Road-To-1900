@@ -143,10 +143,12 @@ namespace Graph {
 }
 
 namespace MaxFlow {
-    const int N = 1e5 + 10, M = 2e5 + 10, INF = 1e8;
+    const int N = 1e5 + 10, M = 2e5 + 10;
+    long long INF = 1e16;
     int n, m, S, T;
-    int f[M]; //流量
+    long long f[M]; //流量
     int d[N], cur[N]; //分层图
+
     struct E {
         int v, ei;
     };
@@ -179,14 +181,14 @@ namespace MaxFlow {
         return false;
     }
 
-    int find(int u, int limit) {
+    long long find(int u, long long limit) {
         if (u == T) return limit;
-        int flow = 0;
+        long long flow = 0;
         for (int i = cur[u]; i < g[u].size() && flow < limit; i++) {
             int v = g[u][i].v;
             cur[u] = i;  // 当前弧优化
             if (d[v] == d[u] + 1 && f[g[u][i].ei]) {
-                int t = find(v, min(f[g[u][i].ei], limit - flow));
+                long long t = find(v, min(f[g[u][i].ei], limit - flow));
                 if (!t) d[v] = -1;
                 f[g[u][i].ei] -= t, f[g[u][i].ei ^ 1] += t, flow += t;
             }
@@ -194,8 +196,8 @@ namespace MaxFlow {
         return flow;
     }
 
-    int dinic() {
-        int r = 0, flow;
+    long long dinic() {
+        long long r = 0, flow;
         while (bfs()) while (flow = find(S, INF)) r += flow;
         return r;
     }
