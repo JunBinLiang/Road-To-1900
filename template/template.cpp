@@ -31,6 +31,110 @@ namespace Fenwick {
 }
 
 
+const int INF = 1e8;
+const int MAX = 200000 + 100;
+struct MinSeg {
+    struct Node {
+        int l, r;
+        int mn;
+    } tr[MAX * 4];
+
+    void build(int id) {
+        int l = tr[id].l, r = tr[id].r;
+        if(l == r) {
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        tr[id * 2 + 1] = {l, mid, INF};
+        tr[id * 2 + 2] = {mid + 1, r, INF};
+        build(id * 2 + 1);
+        build(id * 2 + 2);
+    }
+
+    void update(int id, int index, int val) { 
+        int l = tr[id].l, r = tr[id].r;
+        if(l == r) {
+            tr[id].mn = min(tr[id].mn, val);  
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        int left = id * 2 + 1, right = id * 2 + 2;
+        if(index <= mid) {
+            update(left, index, val);
+        } else {
+            update(right, index, val);
+        }
+        tr[id].mn = min(tr[left].mn, tr[right].mn);
+    }
+
+    int query(int id, int s, int e) {
+        int l = tr[id].l, r = tr[id].r;
+        if(l == s && r == e){
+            return tr[id].mn;
+        }
+        int mid = l + (r - l) / 2;
+        int left = id * 2 + 1, right = id * 2 + 2;
+        if(e <= mid){
+            return query(left, s, e);
+        } else if(s >= mid + 1) {
+            return query(right, s, e);
+        } else {
+            return min(query(left, s, mid), query(right, mid + 1, e));
+        }
+    }
+} minseg;
+
+struct MaxSeg {
+    struct Node {
+        int l, r;
+        int mx;
+    } tr[MAX * 4];
+
+    void build(int id) {
+        int l = tr[id].l, r = tr[id].r;
+        if(l == r) {
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        tr[id * 2 + 1] = {l, mid, -INF};
+        tr[id * 2 + 2] = {mid + 1, r, -INF};
+        build(id * 2 + 1);
+        build(id * 2 + 2);
+    }
+
+    void update(int id, int index, int val) { 
+        int l = tr[id].l, r = tr[id].r;
+        if(l == r) {
+            tr[id].mx = max(tr[id].mx, val);  
+            return;
+        }
+        int mid = l + (r - l) / 2;
+        int left = id * 2 + 1, right = id * 2 + 2;
+        if(index <= mid) {
+            update(left, index, val);
+        } else {
+            update(right, index, val);
+        }
+        tr[id].mx = max(tr[left].mx, tr[right].mx);
+    }
+
+    int query(int id, int s, int e) {
+        int l = tr[id].l, r = tr[id].r;
+        if(l == s && r == e){
+            return tr[id].mx;
+        }
+        int mid = l + (r - l) / 2;
+        int left = id * 2 + 1, right = id * 2 + 2;
+        if(e <= mid){
+            return query(left, s, e);
+        } else if(s >= mid + 1) {
+            return query(right, s, e);
+        } else {
+            return max(query(left, s, mid), query(right, mid + 1, e));
+        }
+    }
+} maxseg;
+
 namespace SegmentTreeRangeAdd {
     struct Node { //Segment Tree for range update
         int l, r, add; long long s;
