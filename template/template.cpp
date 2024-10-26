@@ -264,6 +264,17 @@ namespace MaxFlow {
         g[v].push_back({u, ei});
         f[ei++] = 0;
     }
+    /*
+    void add(vector<E> g[N], int u, int v, int w) {
+        g[u].push_back({v, ei});
+        to[ei] = v; //what each edge point to
+        f[ei++] = w;
+        g[v].push_back({u, ei});
+        to[ei] = u;
+        f[ei++] = 0;
+    }
+    
+    */
 
     bool bfs() {
         memset(d, -1, sizeof d);
