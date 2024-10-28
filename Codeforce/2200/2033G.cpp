@@ -98,17 +98,12 @@ int dfs1(int pa, int u) {
     for(int i = 0; i < min(2, (int)(b.size())); i++) {
         maxs[u].push_back(b[i]);
     }
-    
-    //cout << u << endl;
-    //for(int i = 0; i < maxs[u].size(); i++) cout << maxs[u][i].first << "   " << maxs[u][i].second << endl;
-    //cout << endl;
-    
+
     height[u] = h;
     return h;
 }
 
 void dfs2(vector<int>& path, int pa, int u) {
-    //cout << pa << " " << u << " "  << path << endl;
     for(int i = 0; i < q[u].size(); i++) {
         pair<int, int>& p = q[u][i];
         int k = p.first, idx = p.second;
@@ -118,9 +113,8 @@ void dfs2(vector<int>& path, int pa, int u) {
         pair<int, int> best = maxseg.query(0, max(0, (int)(path.size() - k)), path.size() - 1);
         int j = best.second;
         ans[idx] = max(ans[idx], (int)(path[j] + (path.size() - j) - (2 * INF - j)));
-        //cout <<"query " << u << "  " << j << endl;
     }
-    
+
 
     auto& vec = maxs[u];
     for(int v : g[u]) {
@@ -138,7 +132,7 @@ void dfs2(vector<int>& path, int pa, int u) {
         } else{
             path.push_back((vec[pos].first) + 2 * INF - (sz));
         }
-        
+
         maxseg.update(0, path.size() - 1, path.back());
         dfs2(path, u, v);
         maxseg.update(0, path.size() - 1, -INF);
@@ -154,30 +148,26 @@ void solve() {
         q[i].clear();
         maxs[i].clear();
     }
-    for(int i = 0; i <= m; i++) ans[i] = 0;
     
     for(int i = 0; i < n - 1; i++) {
         int u, v;
         cin >> u >> v;
         g[u].push_back(v);
         g[v].push_back(u);
-        //cout << u << " " << v << endl;
     }
-    
+
     //move up: decrease
     //move down: no change
     cin >> m;
+    for(int i = 0; i <= m; i++) ans[i] = 0;
     for(int i = 0; i < m; i++) {
         int u, k;
         cin >> u >> k;
         q[u].push_back({k, i});
     }
-    
+
     dfs1(-1, 1);
-    
-    //for(int i = 1; i <= n; i++) cout << height[i] << " ";
-    //cout << endl;
-    
+
     vector<int> path;
     maxseg.tr[0] = {0, n, -INF};
     maxseg.build(0);
