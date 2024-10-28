@@ -1,0 +1,51 @@
+#include <string>
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+#include <string.h>
+
+
+using namespace std;
+
+template <typename T>
+ostream& operator <<(ostream& out, const vector<T>& a) {
+  out << "["; bool first = true;
+  for (auto v : a) { out << (first ? "" : ", "); out << v; first = 0;} 
+  out << "]";
+  return out;
+}
+
+//any two consecutive terms of the Fibonacci sequence are relatively prime.
+const int MOD = 1e9 + 7;
+void solve() {
+    long long n; int k;
+    cin >> n >> k;
+    if(k == 1) {
+        cout << n % MOD << endl;
+        return;
+    }
+
+    int a = 1, b = 1;
+    int t = 2;
+    while(b) {
+        int c = a + b;
+        c %= k;
+        a = b;
+        b = c;
+        t++;
+    }
+
+    cout << ((n % MOD) * (t % MOD)) % MOD << endl;
+}
+
+int main(){
+    int t = 1;
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr), cout.tie(nullptr);
+    cin >> t;
+    while(t--) {
+        solve();
+    }
+    return 0;
+}
