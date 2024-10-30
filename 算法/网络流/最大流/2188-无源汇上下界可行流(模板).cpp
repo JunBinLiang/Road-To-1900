@@ -85,8 +85,8 @@ void solve() {
     for(int i = 0; i < m; i++) {  //u -> v
         int u, v, c1, c2;
         cin >> u >> v >> c1 >> c2;
-        A[u] -= c1;
-        A[v] += c1;  
+        A[u] -= c1; //流出少了c1，需要向T留去
+        A[v] += c1; //流进少了c1，需要被S 补上
         add(g, u, v, c1, c2);
     }
 
