@@ -17,7 +17,7 @@ using ll = long long;
 using ull = unsigned long long;
 #define FOR(i, a, b) for (int i = a; i < b; ++i)
 
-const int N = 510 * 2, M = 2e4 + 10, INF = 1e8;
+const int N = 610 * 2, M = 2e4 + 10, INF = 1e8;
 int n, m, S, T;
 int f[M], to[M], weight[M]; //流量
 int d[N]; //分层图
