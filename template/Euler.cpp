@@ -96,7 +96,8 @@ namespace Euler {
             }
             return true;
         }
-        return true;
+        cout << "Invalid Type" << endl;
+        return false;
     }
 
     template <typename G>
