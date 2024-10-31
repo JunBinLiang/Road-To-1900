@@ -47,7 +47,7 @@ namespace Euler {
     }
     
     template <typename G>
-    void dfs(G g[N], int u) {
+    void dfsNonDirect(G g[N], int u) {
         while(g[u].size() > 0) {
             int eid = (*g[u].begin());
             if(used[eid]) {
@@ -56,7 +56,21 @@ namespace Euler {
             }
             used[eid] = true;
             used[eid ^ 1] = true; //删除反向边
-            dfs(g, to[eid]);
+            dfsNonDirect(g, to[eid]);
+            ans[cnte++] = eid;
+        }
+    }
+
+    template <typename G>
+    void dfsDirect(G g[N], int u) {
+        while(g[u].size() > 0) {
+            int eid = (*g[u].begin());
+            if(used[eid]) {
+                g[u].erase(eid);
+                continue;
+            }
+            used[eid] = true;
+            dfsDirect(g, to[eid]);
             ans[cnte++] = eid;
         }
     }
