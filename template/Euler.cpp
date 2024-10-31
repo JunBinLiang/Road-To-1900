@@ -24,6 +24,7 @@ namespace Euler {
     unordered_set<int> usg[N];
     set<int> sg[N];
     int to[M];
+    int from[M];
     int ans[N];
     int din[N], dout[N];
     bool used[M];
@@ -39,6 +40,7 @@ namespace Euler {
     void add(G g[N], int u, int v) {
         g[u].insert(ei);
         to[ei] = v;
+        from[ei] = u;
         ei++;
 
         //count degree
@@ -47,7 +49,7 @@ namespace Euler {
     }
     
     template <typename G>
-    void dfsNonDirect(G g[N], int u) {
+    void dfsNonDirected(G g[N], int u) {
         while(g[u].size() > 0) {
             int eid = (*g[u].begin());
             if(used[eid]) {
@@ -56,13 +58,13 @@ namespace Euler {
             }
             used[eid] = true;
             used[eid ^ 1] = true; //删除反向边
-            dfsNonDirect(g, to[eid]);
+            dfsNonDirected(g, to[eid]);
             ans[cnte++] = eid;
         }
     }
 
     template <typename G>
-    void dfsDirect(G g[N], int u) {
+    void dfsDirected(G g[N], int u) {
         while(g[u].size() > 0) {
             int eid = (*g[u].begin());
             if(used[eid]) {
@@ -70,7 +72,7 @@ namespace Euler {
                 continue;
             }
             used[eid] = true;
-            dfsDirect(g, to[eid]);
+            dfsDirected(g, to[eid]);
             ans[cnte++] = eid;
         }
     }
@@ -136,9 +138,18 @@ namespace Euler {
         }
     }
 
-    void printV() {
+    void printNonDirectedV() {
         //cout << cnte << endl;
         cout << to[ans[cnte - 1] ^ 1] << " ";
+        for(int i = cnte - 1; i >= 0; i--) {
+            cout << to[ans[i]] << " ";
+        }
+        cout << endl;
+    }
+
+     void printDirectedV() {
+        //cout << cnte << endl;
+        cout << from[ans[cnte - 1]] << " ";
         for(int i = cnte - 1; i >= 0; i--) {
             cout << to[ans[i]] << " ";
         }
