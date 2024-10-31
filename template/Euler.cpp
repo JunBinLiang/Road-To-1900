@@ -96,6 +96,7 @@ namespace Euler {
             }
             return true;
         }
+        return true;
     }
 
     template <typename G>
