@@ -29,7 +29,6 @@ namespace Euler {
     bool used[M];
     int ei = 0, cnte = 0;
     
-
     void init() {
         memset(din, 0, sizeof din);
         memset(dout, 0, sizeof dout);
