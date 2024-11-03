@@ -34,6 +34,7 @@ struct SA {
             discrete[i] = s[i];
             p[discrete[i]] ++ ;
         }
+        //因为从2开始, 离散化不能用0
         for (int i = 2; i <= m; i ++ ) p[i] += p[i - 1];
         for (int i = n; i >= 1; i -- ) {
             sa[p[discrete[i]]] = i;
