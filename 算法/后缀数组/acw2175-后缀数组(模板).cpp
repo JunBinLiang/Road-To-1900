@@ -32,8 +32,10 @@ struct SA {
         this -> n = s.size();
         this -> m = 256;
         this -> s = " " + s;
-
-        /*sa = vector<int>(N, 0);
+       
+        /*
+        N = max(N, m + 1); //becare ful if N is too small
+        sa = vector<int>(N, 0);
         rk = vector<int>(N, 0);
         p = vector<int>(N, 0);
         discrete = vector<int>(N, 0);
