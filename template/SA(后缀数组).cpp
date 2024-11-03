@@ -1,19 +1,32 @@
+/*
+后缀数组
+sa[i] : 排名第i的是第几个后缀
+rank[i] : 第i个后缀的排名
+height[i] : sa[i] 和 sa[i - 1] 的最长公共前缀
+
+height[i] = lcp(i, i - 1)
+h[i] = height[rk[i]] : 第i个后缀和排名在他前面一个后缀的最长公共前缀 
+性质 : h[i] >= h[i - 1] - 1
+*/
+
+template <typename T> 
 struct SA {
-    string s; int n, m;
-    //vector<int> sa, rk, p, height;
-    //vector<int> discrete, second; //first[i] => 第i个后缀按前k个字母排好序后的前k个离散化数值
-    int sa[1000010], rk[1000010], p[1000010], height[1000010], discrete[1000010], second[1000010], oldDiscrete[1000010];
-    void init(string s, int N = 1000010) {
+    T s; int n, m;
+    vector<int> sa, rk, p, height;
+    vector<int> discrete, second; //first[i] => 第i个后缀按前k个字母排好序后的前k个离散化数值
+    //int sa[1000010], rk[1000010], p[1000010], height[1000010], discrete[1000010], second[1000010], oldDiscrete[1000010];
+    void init(T s, int N = 1000010) {
         this -> n = s.size();
         this -> m = 256;
         this -> s = " " + s;
+        N = max(N, m + 1);
 
-        /*sa = vector<int>(N, 0);
+        sa = vector<int>(N, 0);
         rk = vector<int>(N, 0);
         p = vector<int>(N, 0);
         discrete = vector<int>(N, 0);
         second = vector<int>(N, 0);
-        height = vector<int>(N, 0);*/
+        height = vector<int>(N, 0);
     }
 
     void getSA() {
@@ -26,7 +39,6 @@ struct SA {
             sa[p[discrete[i]]] = i;
             p[discrete[i]]--;
         }
-        
         for(int k = 1; k <= n; k *= 2) {
             //没有第二关键字
             int num = 0; 
@@ -47,12 +59,12 @@ struct SA {
             }
 
             swap(discrete, second);  //这里的second 现在保存的是老的离散化指
-            
+            vector<int> oldDiscrete = second;
             //离散化
             discrete[sa[1]] = 1, num = 1;
             for (int i = 2; i <= n; i ++ ) {
-                //discrete[sa[i]] = (oldDiscrete[sa[i]] == oldDiscrete[sa[i - 1]] && oldDiscrete[sa[i] + k] == oldDiscrete[sa[i - 1] + k]) ? num : ++num;
-                discrete[sa[i]] = (second[sa[i]] == second[sa[i - 1]] && second[sa[i] + k] == second[sa[i - 1] + k]) ? num : ++num;
+                discrete[sa[i]] = (oldDiscrete[sa[i]] == oldDiscrete[sa[i - 1]] && oldDiscrete[sa[i] + k] == oldDiscrete[sa[i - 1] + k]) ? num : ++num;
+                //discrete[sa[i]] = (second[sa[i]] == second[sa[i - 1]] && second[sa[i] + k] == second[sa[i - 1] + k]) ? num : ++num;
             }
             if (num == n) break; //完全分离，可提前break
             m = num;  
@@ -69,4 +81,4 @@ struct SA {
             height[rk[i]] = k;
         }
     }
-} sa;
+};
