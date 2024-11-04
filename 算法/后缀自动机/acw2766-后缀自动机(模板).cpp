@@ -88,6 +88,7 @@ struct SAM {
     }
 } sam;
 
+//不用邻表会超时
 const int N = 2e6 + 10;
 long long ans = 0;
 int h[N], e[N], ne[N], idx;
