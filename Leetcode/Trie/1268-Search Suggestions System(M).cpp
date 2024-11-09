@@ -1,38 +1,54 @@
-struct Node {
-    Node* childs[26];
-    vector<string> a;
-    
-    void add(string s) {
-        a.push_back(s);
-        sort(a.begin(), a.end());
-        while(a.size() > 3) a.pop_back();
+struct Trie {
+    int tr[(100000 + 10)][26];
+    vector<string> a[(100000 + 10) * 26]; 
+    int id = 1;
+    void init() {
+        memset(tr, -1, sizeof tr);
     }
-};
+    
+    void add(string& s) {
+        int u = 0;
+        for(int i = 0; i < s.size(); i++) {
+            int c = s[i] - 'a';
+            if(tr[u][c] == -1) tr[u][c] = id++;
+            u = tr[u][c];
+            a[u].push_back(s);
+            sort(a[u].begin(), a[u].end());
+            while(a[u].size() > 3) a[u].pop_back();
+        }
+    }
+    
+    void clear() {
+        for(int i = 0; i <= id; i++) {
+            a[i].clear();
+            for(int j = 0; j < 26; j++) {
+                tr[i][j] = -1;
+            }
+        }
+        id = 1;
+    }
+} tr;
+
+bool yes = false;
+void init() {
+    if(yes) return;
+    yes = true;
+    tr.init();
+}
 
 class Solution {
 public:
     vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
-        Node* root = new Node();
-        for(string& product : products) {
-            Node* u = root;
-            for(int i = 0; i < product.size(); i++) {
-                int c = product[i] - 'a';
-                if(u -> childs[c] == NULL) {
-                    u -> childs[c] = new Node();
-                }
-                u = u -> childs[c];
-                u -> add(product);
-            }
-        }
-        
+        init();
+        for(string& s : products) tr.add(s);
         vector<vector<string>> ans(searchWord.size());
-        Node* u = root;
-        for(int i = 0; i < searchWord.size(); i++) {
+        int u = 0;
+        for(int i = 0; i < searchWord.size() && u != -1; i++) {
             int c = searchWord[i] - 'a';
-            u = u -> childs[c];
-            if(u == NULL) break;
-            ans[i] = vector<string>(u -> a.begin(), u -> a.end());
+            u = tr.tr[u][c];
+            if(u != -1) ans[i] = vector<string>(tr.a[u].begin(), tr.a[u].end());
         }
+        tr.clear();
         return ans;
     }
 };
