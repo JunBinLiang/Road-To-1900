@@ -49,7 +49,7 @@ struct Tuple {
     int l, r, o; 
 };
 struct Q {
-    int y1, y2, si, i;
+    int y, si, i;
 };
 vector<Q> q[N];
 
@@ -89,9 +89,9 @@ void solve() {
     memset(dp, 0, sizeof dp);
 
     vector<Tuple> pseg;
+    vector<Tuple> cseg;
     int si = 0, lsi = 1e9, rsi = -1;
     for(int i = 1; i <= n; i++) {
-        vector<Tuple> cseg;
         int o = a[i];
         int j = pseg.size() - 1;
         int L = i, R = i;
@@ -118,10 +118,10 @@ void solve() {
             int x1 = seg.l - 1, x2 = seg.r - 1;
             int y1 = 1, y2 = mp[seg.o];
             if(x1 - 1 >= 0) {
-                q[x1 - 1].push_back({y1 - 1, y2, si, i});
+                q[x1 - 1].push_back({y2, si, i}); //q[x1 - 1].push_back({y1 - 1, y2, si, i});
                 cnt[si] += 2;
             }
-            q[x2].push_back({y2, y1 - 1, si, i});
+            q[x2].push_back({y2, si, i}); //q[x2].push_back({y2, y1 - 1, si, i});
             cnt[si] += 2;
             if(i == n) {
                 lsi = min(lsi, si);
@@ -129,15 +129,9 @@ void solve() {
             }
             oval[si] = y2;
             si++;
-            /*
-            q[qi++] = {x1 - 1, y1 - 1, 1, i, o};
-            q[qi++] = {x1 - 1, y2, -1, i, o};
-            
-            q[qi++] = {x2, y1 - 1, -1, i, o};
-            q[qi++] = {x2, y2, 1, i, o};
-            */
         }
-        pseg = cseg;
+        swap(pseg, cseg);
+        cseg.clear();
     }
 
     tr.init(id + 10);
@@ -154,15 +148,26 @@ void solve() {
         }
 
         for(auto& v : q[x]) {
-            int y1 = v.y1, y2 = v.y2, si = v.si;
+            int y2 = v.y, si = v.si;
+            int y1 = 0;
             cnt[si] -= 2;
-            int val1 = (tr.query(0, y1));
-            int val2 = (-tr.query(0, y2));
-            if(val2 < 0) val2 += MOD;
-            dp[si] += val1;
-            dp[si] %= MOD;
-            dp[si] += val2;
-            dp[si] %= MOD;
+            if(cnt[si] != 0) {
+                int val1 = (tr.pre(y1 + 1));
+                int val2 = (-tr.pre(y2 + 1));
+                if(val2 < 0) val2 += MOD;
+                dp[si] += val1;
+                dp[si] %= MOD;
+                dp[si] += val2;
+                dp[si] %= MOD;
+            } else {
+                int val1 = (-tr.pre(y1 + 1));
+                int val2 = (tr.pre(y2 + 1));
+                if(val1 < 0) val1 += MOD;
+                dp[si] += val1;
+                dp[si] %= MOD;
+                dp[si] += val2;
+                dp[si] %= MOD;
+            }
             if(cnt[si] == 0) {
                 vec[v.i].push_back({oval[si], dp[si]});
             }
