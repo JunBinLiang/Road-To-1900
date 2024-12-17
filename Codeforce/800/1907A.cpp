@@ -11,11 +11,6 @@
 
 using namespace std;
 
-bool isL(char c) {
-    int d = c - 'a';
-    return d >= 0 && d < 26;
-}
-
 void solve() {
     string s;
     cin >> s;
