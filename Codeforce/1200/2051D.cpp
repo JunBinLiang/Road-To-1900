@@ -14,7 +14,7 @@ using namespace std;
 long long cal(vector<int>& a, long long x) {
     int n = a.size();
     int l = 0, r = a.size() - 1;
-    int ans = 0;
+    long long ans = 0;
     while(l < r) {
         if(a[l] + a[r] >= x) {
             ans += (r - l);
@@ -27,7 +27,7 @@ long long cal(vector<int>& a, long long x) {
 }
 
 void solve() {
-    int n, x, y;
+    int n; long long x, y;
     cin >> n >> x >> y;
     vector<int> a(n);
     long long sum = 0;
