@@ -32,26 +32,28 @@ namespace Fenwick {
 
 struct BIT { //Maximum
 	int c[3010];
+	  int n;
+	  inline void init() {
+	    n = 3005;
+	    for(int i = 0; i < N; i++) c[i] = -1e9;
+	  }
 	
-	inline void init() {
-		mems(c, -0x3f);
-	}
+	  inline void update(int x, int d) {
+	      x++;
+		    for (int i = x; i <= n; i += (i & (-i))) {
+  			    c[i] = max(c[i], d);
+		    }
+	  }
 	
-	inline void update(int x, int d) {
-		for (int i = x; i <= n; i += (i & (-i))) {
-			c[i] = max(c[i], d);
-		}
-	}
-	
-	inline int query(int x) {
-		int res = -1e9;
-		for (int i = x; i; i -= (i & (-i))) {
-			res = max(res, c[i]);
-		}
-		return res;
-	}
+	  inline int query(int x) {
+	      x++;
+		    int res = -1e9;
+		    for (int i = x; i; i -= (i & (-i))) {
+			    res = max(res, c[i]);
+		    }
+		    return res;
+	  }
 } T;
-
 
 const int INF = 1e8;
 const int MAX = 200000 + 100;
