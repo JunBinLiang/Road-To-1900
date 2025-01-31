@@ -14,15 +14,15 @@ ll fpow(ll x, int y){
 	return res;
 }  
   
-ll modInverse(ll a, ll m) {
-    ll m0 = m;
-    ll y = 0, x = 1;
+long long modInverse(long long a, long long m) {
+    long long m0 = m;
+    long long y = 0, x = 1;
     if (m == 1)
         return 0;
     while (a > 1) {
           // q is quotient
-        ll q = a / m;
-        ll t = m;
+        long long q = a / m;
+        long long t = m;
         // m is remainder now, process
         // same as Euclid's algo
         m = a % m;
