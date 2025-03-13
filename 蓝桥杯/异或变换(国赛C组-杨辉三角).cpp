@@ -95,6 +95,14 @@ void solve() {
     }
     
     cout << endl;
+    
+    /*cout << endl << endl;
+    for(bool b : bit) {
+        if(b) cout << 0 << " ";
+        else cout << 1 << " ";
+    }
+    cout << endl;*/
+}
 
 int main() {
   int t = 1;
