@@ -59,7 +59,7 @@ int getMost(vector<int>& cnt1, int n) { //贪心放就可以
     int tot = 0;
     for(int i = 1; i <= n; i++) {
         int pos = -1, mx = -1, s = 0;
-        for(int j = 1; j < 26; j++) {
+        for(int j = 25; j >= 0; j--) {
             if( i - 1 - cnt2[j] + s  >= mx) {
                 pos = j;
                 mx = i - 1 - cnt2[j] + s ;
