@@ -175,3 +175,155 @@ int main() {
   }
   return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <map>
+#include <queue>    
+#include <deque>  
+
+using namespace std;
+
+#define ve vector
+#define pb push_back
+#define FOR(i, a, b) for (int i = a; i < b; ++i)
+using ll = long long;
+
+const int N = 1e5 + 10;
+const int MOD = 1e9 + 7, BASE = 101;
+unsigned long long p[N];
+int lst1[N], nxt1[N], lst2[N], nxt2[N];
+int lst[26];
+deque<int> d[26];
+
+void init(string& s, string& t) {
+    memset(lst1, -1, sizeof lst1);
+    memset(lst2, -1, sizeof lst2);
+    memset(nxt1, -1, sizeof nxt1);
+    memset(nxt2, -1, sizeof nxt2);
+    p[0] = 1;
+    for(int i = 1; i < N; i++) {
+        p[i] = p[i - 1] * BASE;
+    }
+
+    vector<int> pos(26, -1);
+    for(int i = 0; i < s.size(); i++) {
+        int c = s[i] - 'a';
+        lst1[i] = pos[c];
+        nxt1[pos[c]] = i; 
+        pos[c] = i; 
+    }
+
+    pos = vector(26, -1);
+    for(int i = 0; i < t.size(); i++) {
+        int c = t[i] - 'a';
+        lst2[i] = pos[c];
+        nxt2[pos[c]] = i; 
+        pos[c] = i; 
+    }
+    
+    /*for(int i = 0; i < t.size(); i++) {
+        cout << lst2[i] << " ";
+    }
+    cout << endl;
+    for(int i = 0; i < t.size(); i++) {
+        cout << nxt2[i] << " ";
+    }
+    cout << endl << endl;*/
+}
+
+bool ok(string& s, string& t, int k) {
+    int n = s.size(), m = t.size();
+
+    unordered_set<unsigned long long> us;
+    unsigned long long h = 0;
+    for(int i = 0; i < n; i++) {
+        int dif = 0;
+        if(lst1[i] != -1 && i - lst1[i] < k) {
+            dif = i - lst1[i];
+        }
+        h = h * BASE + dif;
+        
+        if(i + 1 >= k) {
+            us.insert(h);
+            int j = i - k + 1;
+            int dif = 0;
+            if(nxt1[j] != -1 && nxt1[j] <= i) {
+                dif = i - nxt1[j];
+                h = h - ((nxt1[j] - j) * p[i - nxt1[j]]);
+            }
+        }
+    }
+
+    h = 0;
+    for(int i = 0; i < m; i++) {
+        int dif = 0;
+        if(lst2[i] != -1 && i - lst2[i] < k) {
+            dif = i - lst2[i];
+        }
+        h = h * BASE + dif;
+        
+        if(i + 1 >= k) {
+            if(us.find(h) != us.end()) {
+                return true;
+            }
+            int j = i - k + 1;
+            int dif = 0;
+            if(nxt2[j] != -1 && nxt2[j] <= i) {
+                dif = i - nxt2[j];
+                h = h - ((nxt2[j] - j) * p[i - nxt2[j]]);
+            }
+
+        }
+    }
+    return false;
+}
+
+void solve() {
+    string s, t;
+    cin >> s >> t; 
+    init(s, t);
+    int l = 1, r = min(s.size(), t.size());
+    int ans = -1;
+    while(l <= r) {
+        int mid = l + (r - l) / 2;
+        if(ok(s, t, mid)) {
+            ans = mid;
+            l = mid + 1;
+        } else {
+            r = mid - 1;
+        }
+    }
+    cout << ans << endl;
+}
+
+int main() {
+  int t = 1;
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr), cout.tie(nullptr);
+  //cin >> t;
+  while(t--) {
+    solve();
+  }
+  return 0;
+}
