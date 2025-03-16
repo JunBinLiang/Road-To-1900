@@ -17,7 +17,7 @@ using namespace std;
 #define pb push_back
 #define FOR(i, a, b) for (int i = a; i < b; ++i)
 using ll = long long;
-
+//A + gcd(A, B) <= B if A < B
 void solve() {
     int n;
     cin >> n;
