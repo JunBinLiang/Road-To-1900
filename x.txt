@@ -1,0 +1,213 @@
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <set>
+#include <map>
+#include <queue>    
+#include <deque>  
+
+using namespace std;
+
+#define ve vector
+#define pb push_back
+#define FOR(i, a, b) for (int i = a; i < b; ++i)
+using ll = long long;
+
+const int N = 2e5 + 10;
+vector<int> a, b, p;
+vector<int> ps, even;
+map<long long, long long> dp1, dp2;
+int n;
+
+int get(vector<int>& p, int l, int r) {
+    return p[r] - p[l - 1];
+}
+
+long long recal1(long long m);
+long long recal2(long long m);
+
+long long recal1(long long m) { //[n : m] take all
+    if(dp1.find(m) != dp1.end()) return dp1[m];
+    long long c1 = 0, c2 = 0;
+    int P = p[n]; 
+    if(m >= (2 * n)) {
+        c1 = ((m - 2 * n) / 4 + 1);
+    }
+    if(m >= (2 * n + 1)) {
+        c2 = ((m - 2 * n - 1) / 4 + 1);
+    }
+    c1 *= P;
+    c2 *= P;
+    long long s = get(ps, n, min(2 * n - 1ll, m));
+    
+     cout << "recal1be " << m << "  |" << c1 << " " << c2 <<"  " << s << endl;
+    
+    int t = 4 * n;
+    int j = 0;
+    for(int i = 2 * n; i <= min(4 * n - 1ll, m); i++) {
+        if(i % 2 == 0) {
+            c1 += (b[i / 2]);
+        } else {
+            c2 += (b[i / 2]);
+        }
+        j++;
+        cout << "ok " << i << "  " << c1 << " " << c2 << endl;
+    }
+
+    int o = m, e = m;
+    if(m % 2 == 1) e--;
+    else o--;
+    if(e >= t) {
+        c1 += recal2(e / 4);
+    }
+    if(o >= t) {
+        c2 += recal2(o / 4);
+    }
+    cout << "recal1 " << m << "  |" << c1 << " " << c2 <<"  " << s << endl;
+    return dp1[m] = c1 + c2 + s;
+}
+
+long long recal2(long long m) { //[n : m] take half
+    if(dp2.find(m) != dp2.end()) {
+        return dp2[m];
+    }
+
+    //take even but not odd
+    long long s = 0;
+    int P = p[n];
+    for(int i = n; i <= min(m, 2 * n + 0ll - 1); i++) {
+        if(i % 2 == 0) {
+            s += b[i]; 
+        }
+    }
+
+    int j = n + 1;
+    int t = 4 * n;
+    for(int i = 2 * n; i <= min(4 * n - 1ll, m); i++) {
+        if(i % 2 == 0) {
+            s += (b[i / 2]);
+        } else {
+            
+        }
+    }
+
+    int o = m, e = m;
+    if(m % 2 == 1) e--;
+    else o--;
+
+    if(e >= t) {
+        s += recal1(e / 4);
+    }
+    if(o >= t) {
+        s += recal1(o / 4);
+    }
+    cout << "recal2 " << m << "   " << s << endl;
+    return dp2[m] = s;
+}
+
+long long cal(long long m) {
+    if(m < n) {
+        return ps[m];
+    }
+    cout << "cal1 " << ps[n - 1] << endl;
+    return ps[n - 1] + recal1(m);
+}
+
+void solve() {
+    long long L, R;
+    cin >> n >> L >> R;
+    a = vector<int>(n + 1);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+
+    if(n % 2 == 0) {
+        n++;
+        int xo = 0;
+        for(int i = 1; i <= n / 2; i++) {
+            xo ^= a[i];
+        }
+        a.push_back(xo);
+    }
+
+    if(n == 1) {
+        a.push_back(a[0]);
+        a.push_back(a[0]);
+        n = 3;
+    }
+
+    p = vector<int> (2 * n + 1);
+    for(int i = 1; i <= n; i++) {
+        p[i] = a[i];
+        if(i > 1) p[i] ^= p[i - 1];
+    }
+
+    b = vector<int>(2 * n + 1);
+    for(int i = 1; i <= n; i++) b[i] = a[i];
+    for(int i = n + 1; i < b.size(); i++) {
+        b[i] = get(p, 1, i / 2);
+        p[i] = b[i];
+        p[i] ^= p[i - 1];
+    }
+    
+
+    ps = vector<int>(2 * n + 1);
+    even = vector<int>(2 * n + 1);
+    int es = 0;
+    for(int i = 1; i <= 2 * n; i++) {
+        ps[i] = b[i];
+        if(i) ps[i] += ps[i - 1];
+        if(i % 2 == 0) {
+            es += b[i];
+        }
+        even[i] = es;
+    }
+    
+    dp1.clear();
+    dp2.clear();
+
+    for(int x : b) cout << x << " ";
+    cout << endl;
+    for(int x : ps) cout << x << " ";
+    cout << endl << endl;
+    long long s1 = cal(R); 
+    cout << endl;
+    long long s2 = cal(L - 1);
+    
+    cout << s1 << "  " << s2 << "   |" << s1 - s2 << endl;
+    cout << s1 - s2 << endl;
+    
+    cout << endl << endl;
+    for(int i = 1; i <= 2 * n; i++) cout << b[i] << " ";
+
+    for(int j = 2 * n + 1; j <= 69; j++) {
+        int o = 0;
+        for(int i = 1; i <= j / 2; i++) {
+            o ^= b[i];
+        }
+        cout << o << " ";
+        b.push_back(o);
+    }
+    cout << endl;
+    int x = 0;
+    for(int i = 1; i <= 64; i++) x += b[i];
+    cout << x << endl;
+    x = 0;
+    for(int i = 1; i <= 69; i++) x += b[i];
+    cout << x << endl;
+}
+
+
+int main() {
+  int t = 1;
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr), cout.tie(nullptr);
+  cin >> t;
+  while(t--) {
+    solve();
+  }
+  return 0;
+}
