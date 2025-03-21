@@ -65,14 +65,14 @@ struct Node {
 } tr[N * 4];
 
 
-Mat base[66];
+Mat base[52];
 void init() {
     base[0].a[0][0] = 0;
     base[0].a[0][1] = 1;
     base[0].a[1][0] = 1;
     base[0].a[1][1] = 1;
     base[0].init(2, 2);
-    for(int i = 1; i <= 65; i++) {
+    for(int i = 1; i <= 50; i++) {
         base[i] = base[i - 1] * base[i - 1];
         base[i].init(2, 2);
     }
