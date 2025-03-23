@@ -1,4 +1,5 @@
 //https://www.lanqiao.cn/problems/1159/learning/?page=2&first_category_id=1&second_category_id=8
+//证明 ： https://www.acwing.com/blog/content/24362/
 #include <iostream>
 #include <vector>
 
