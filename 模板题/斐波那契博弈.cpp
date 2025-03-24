@@ -3,6 +3,7 @@ using namespace std;
 // 每次行动拿走不超过上一次的两倍，取走最后的人获胜。
 //结论 : 当石头的数量为斐波那契数列时，后手必胜，否则先手必胜。
 //证明 : https://zhuanlan.zhihu.com/p/574189420
+//https://www.cnblogs.com/tttkf/p/15895646.html
 
 void solve(long long n) {
   if(n == 1) {
