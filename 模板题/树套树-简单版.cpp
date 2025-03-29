@@ -23,7 +23,7 @@ int a[N];
 
 struct Node {
     int l, r;
-    map<int, int> mp;
+    multiset<int> ms;
 } tr[N * 4];
 
 int id = 0;
@@ -41,9 +41,10 @@ void del(map<int, int>& mp, int k) {
 }
 
 void build(int u) {
+    tr[u].ms.insert(-1);
     int l = tr[u].l, r = tr[u].r;
     if(l == r) {
-        tr[u].mp[a[l]]++;
+        tr[u].ms.insert(a[l]);
         return;
     }
     int mid = l + (r - l) / 2;
@@ -53,16 +54,16 @@ void build(int u) {
     build(left);
     build(right);
     for(int i = l; i <= r; i++) {
-        tr[u].mp[a[i]]++;
+        tr[u].ms.insert(a[i]);
     }
 }
 
 void update(int u, int index, int val) {
     int l = tr[u].l, r = tr[u].r;
-    del(tr[u].mp, a[index]);
+    tr[u].ms.insert(val);
+    tr[u].ms.erase(tr[u].ms.find(a[index]));
     if(l == r ){
-        a[index] = val;
-        tr[u].mp[a[index]]++;
+        a[index] = val;;
         return;
     }
     int mid = l + (r - l) / 2;
@@ -71,16 +72,10 @@ void update(int u, int index, int val) {
     } else {
         update(u * 2 + 2, index, val);
     }
-    tr[u].mp[a[index]]++;
 }
 
-int get(map<int, int>& mp, int k) {
-    auto it = mp.upper_bound(k - 1);
-    if(it != mp.begin()) {
-        it--;
-        return it -> first;
-    }
-    return -1;
+int get(int u, int k) {
+    return *(--tr[u].ms.lower_bound(k));
 }
 
 int merge(int a, int b) {
@@ -92,7 +87,7 @@ int merge(int a, int b) {
 int query(int u, int s, int e, int k) {
     int l = tr[u].l, r = tr[u].r;
     if(l == s && r == e) {
-        return get(tr[u].mp, k);
+        return get(u, k);
     }
     int mid = l + (r - l) / 2;
     if(e <= mid) return query(u * 2 + 1, s, e, k);
