@@ -20,12 +20,12 @@ void solve()
         if (k - i & 1)
         {
             for (int j = 0; j <= s; j += i - 1)
-                f[i - 1] |= (f[i] <<= i - 1);
+                f[i - 1] |= (f[i] <<= (i - 1));
         }
         else
         {
             for (int j = 0; j <= s; j += i - 1)
-                f[i - 1] |= (f[i] >>= i - 1);
+                f[i - 1] |= (f[i] >>= (i - 1));
         }
         // cout << i - 1 << '\n';
         // for (int j = 0; j <= s; j++)
