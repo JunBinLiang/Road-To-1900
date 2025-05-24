@@ -1,0 +1,44 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        return new ArrayList<>(Stream.of(IntStream.of(nums).sorted().toArray())
+            .flatMap(sorted -> IntStream.range(0, sorted.length - 2)
+                .boxed()
+                .flatMap(i ->
+                    Stream.iterate(
+                        new int[]{i + 1, sorted.length - 1},
+                        a -> a[0] < a[1],
+                        a -> (sorted[i] + sorted[a[0]] + sorted[a[1]] < 0)
+                            ? new int[]{a[0] + 1, a[1]}
+                            : new int[]{a[0], a[1] - 1}
+                    )
+                    .filter(a -> sorted[i] + sorted[a[0]] + sorted[a[1]] == 0)
+                    .map(a -> Arrays.asList(sorted[i], sorted[a[0]], sorted[a[1]]))
+                )
+            ).collect(Collectors.toSet()));
+    }
+}
+
+/*
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Set<List<Integer>> set = IntStream.range(0, (nums = IntStream.of(nums).sorted().toArray()).length - 2)
+            .boxed()
+            .flatMap(i ->
+                Stream.iterate(
+                    new int[]{i + 1, nums.length - 1},
+                    a -> a[0] < a[1],
+                    a -> (nums[i] + nums[a[0]] + nums[a[1]] < 0)
+                        ? new int[]{a[0] + 1, a[1]}
+                        : new int[]{a[0], a[1] - 1}
+                )
+                .filter(a -> nums[i] + nums[a[0]] + nums[a[1]] == 0)
+                .map(a -> Arrays.asList(nums[i], nums[a[0]], nums[a[1]]))
+            )
+            .collect(Collectors.toSet());
+
+        return new ArrayList<>(set);
+    }
+}
+
+nums must be final in order to refer, this not work, instead needed to do a flag again
+*/
