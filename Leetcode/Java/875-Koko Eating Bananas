@@ -1,0 +1,39 @@
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        return IntStream.range(0, 999).boxed().reduce(
+            new int[]{1, 1000000000, 0},
+            (a, t) -> {
+                int mid = (a[0] + a[1]) / 2;
+                return (a[1] < a[0]) ? a :
+                    (Arrays.stream(piles).boxed().reduce(
+                        0L,
+                        (sum, pile) -> sum += ((pile - 1) / mid + 1),
+                        (sum1, sum2) -> sum1
+                    ) <= h)
+                        ? new int[]{a[0], mid - 1, mid}
+                        : new int[]{mid + 1, a[1], a[2]};
+            },
+            (a1, a2) -> a1
+        )[2];
+    }
+}
+
+/*
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        return IntStream.range(0, 999).boxed().reduce(new int[]{1, 1000000000, 0}, 
+            (a, t) -> {
+                if(a[1] < a[0]) return a;
+                int mid = (a[0] + a[1]) / 2;
+                long s = Arrays.stream(piles).boxed().reduce(0L, (sum, pile) -> sum += ((pile - 1) / mid + 1), (sum1, sum2) -> sum1);
+                if(s <= h) {
+                    return new int[]{a[0], mid - 1, mid};
+                } else {
+                    return new int[]{mid + 1, a[1], a[2]};
+                }
+            },
+            (a1, a2) -> a1 
+        )[2];
+    }
+}
+*/
