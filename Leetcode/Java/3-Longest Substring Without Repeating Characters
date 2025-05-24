@@ -3,6 +3,25 @@ class Solution {
         return IntStream.range(0, s.length()).boxed().reduce(
             new int[258],
             (a, right) -> {
+                Stream.iterate(
+                    a[s.charAt(right)]++,
+                    i -> a[s.charAt(right)] > 1,
+                    i -> a[s.charAt(a[256]++)]--
+                ).forEach(i -> {}); // Force execution of the stream
+
+                a[257] = Math.max(a[257], right - a[256] + 1);
+                return a;
+            },
+            (a1, a2) -> a1
+        )[257];
+    }
+}
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        return IntStream.range(0, s.length()).boxed().reduce(
+            new int[258],
+            (a, right) -> {
                 Stream.iterate(a[s.charAt(right)]++, i -> a[s.charAt(right)] > 1, i -> {
                     a[s.charAt(a[256]++)]--;
                     return i;
