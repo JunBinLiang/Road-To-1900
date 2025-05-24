@@ -1,0 +1,13 @@
+class Solution {
+    public int fib(int n) {
+        return n <= 2
+            ? (new int[]{0, 1, 1})[n]
+            : IntStream.range(0, n - 2)
+                .boxed()
+                .reduce(
+                    new int[]{1, 2},
+                    (a, i) -> new int[]{a[1], a[0] + a[1]},
+                    (a1, a2) -> a1
+                )[0];
+    }
+}
