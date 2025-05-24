@@ -1,0 +1,14 @@
+/*
+Why Using Box
+In Java, variables used inside a lambda must be effectively final — meaning they can’t change, and must not be re-assigned after initialization. But i is declared in a lambda (i -> ...), and you’re trying to access it inside a nested lambda (j -> ...), which breaks that rule.
+*/
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        return IntStream.range(0, nums.length).boxed().flatMap(i -> IntStream.range(i + 1, nums.length)
+                .filter(j -> nums[i] + nums[j] == target)
+                .mapToObj(j -> new int[]{i, j}))
+                .findFirst()
+                .orElse(null);
+                        
+    }
+}
