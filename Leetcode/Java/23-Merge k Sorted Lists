@@ -1,0 +1,57 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        return Stream.of(lists)
+            .flatMap(t -> Stream.iterate(t, u -> u != null, u -> u.next))
+            .sorted((t, u) -> u.val - t.val)
+            .reduce(null, (t, u) -> new ListNode(u.val, t));
+    }
+}
+
+/*
+import java.util.stream.Stream;
+public class GFG {
+
+    public static void main(String[] args)
+    {
+
+        // create a stream using iterate
+        Stream<Integer> stream
+            = Stream.iterate(1,
+                             i -> i <= 20, i -> i * 2);
+
+        // print Values
+        stream.forEach(System.out::println);
+    }
+}
+
+
+class Geeks
+{
+    // Driver code
+    public static void main(String[] args)
+    {
+        // Creating a List of Lists
+        List<List<String>> listOfLists = Arrays.asList(
+            Arrays.asList("Geeks", "For"),
+            Arrays.asList("GeeksForGeeks", "A computer portal"),
+            Arrays.asList("Java", "Programming")
+        );
+
+        // Using Stream flatMap(Function mapper)
+        listOfLists.stream()
+                   .flatMap(list -> list.stream())
+                   .forEach(System.out::println);
+    }
+}
+
+*/
