@@ -1,0 +1,19 @@
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        return Arrays.stream(intervals)
+            .sorted((a, b) -> a[0] - b[0])
+            .reduce(
+                new LinkedList<int[]>(),
+                (stk, curr) -> {
+                    if (stk.isEmpty() || stk.getLast()[1] < curr[0]) {
+                        stk.add(curr);
+                    } else {
+                        stk.getLast()[1] = Math.max(stk.getLast()[1], curr[1]);
+                    }
+                    return stk;
+                },
+                (stk1, stk2) -> stk1 // dummy combiner since no parallel stream
+            )
+            .toArray(int[][]::new);
+    }
+}
