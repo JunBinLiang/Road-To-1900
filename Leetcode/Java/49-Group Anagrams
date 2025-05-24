@@ -1,0 +1,46 @@
+/*
+Stream.of(strs)
+
+Converts the input array into a Stream.
+
+.collect(Collectors.groupingBy(...))
+
+Groups elements in the stream based on a key (here, the sorted string).
+
+t -> Stream.of(t.split(""))
+
+Splits each string t into individual characters (as strings), e.g. "eat" → ["e", "a", "t"].
+
+.sorted()
+
+Sorts those characters, e.g. ["e", "a", "t"] → ["a", "e", "t"].
+
+.collect(Collectors.joining())
+
+Joins the sorted characters back into a single string, e.g. ["a", "e", "t"] → "aet".
+
+So the grouping key becomes the sorted version of the string (e.g. "eat", "tea", "ate" all become "aet").
+
+.values()
+
+groupingBy returns a Map<String, List<String>>. Calling .values() gives you just the groups (i.e. the List<List<String>>).
+
+new ArrayList<>(...)
+
+Wraps the Collection<List<String>> returned by .values() into a concrete ArrayList.
+
+*/
+
+class Solution {
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        return new ArrayList<>(
+            Stream.of(strs)
+                .collect(Collectors.groupingBy(
+                    t -> Stream.of(t.split(""))          // 1. Split each string into chars
+                                .sorted()                // 2. Sort the characters
+                                .collect(Collectors.joining()) // 3. Join them into a sorted string
+                )).values()                             // 4. Values of the map = groups of anagrams
+        );
+    }
+}
