@@ -1,0 +1,14 @@
+class Solution {
+    public int maxArea(int[] height) {
+        return Stream.iterate(
+                new int[]{0, height.length - 1},
+                p -> p[0] < p[1],
+                p -> height[p[0]] < height[p[1]] 
+                        ? new int[]{p[0] + 1, p[1]} 
+                        : new int[]{p[0], p[1] - 1}
+            )
+            .map(p -> Math.min(height[p[0]], height[p[1]]) * (p[1] - p[0]))
+            .max(Integer::compare)
+            .orElse(0);
+    }
+}
