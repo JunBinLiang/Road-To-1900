@@ -1,0 +1,10 @@
+class Solution {
+    public int maxSubArray(int[] nums) {
+        return IntStream.range(0, nums.length)
+            .map(i -> (i > 0)
+                ? ((nums[i - 1] >= 0) ? (nums[i] += nums[i - 1]) : nums[i])
+                : nums[i])
+            .max()
+            .orElse(0);
+    }
+}
