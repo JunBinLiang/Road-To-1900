@@ -1,0 +1,29 @@
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        return IntStream.range(1, nums.length).boxed().reduce(
+            Arrays.asList(Arrays.asList(nums[0])),
+            (list, i) -> IntStream.range(0, list.size() * (i + 1))
+                .mapToObj(j -> IntStream.range(0, i + 1)
+                    .mapToObj(pos ->
+                        (pos == j % (i + 1)) ? (nums[i])
+                            : ((pos < j % (i + 1))
+                                ? list.get(j / (i + 1)).get(pos)
+                                : list.get(j / (i + 1)).get(pos - 1))
+                    )
+                    .collect(Collectors.toList())
+                )
+                .collect(Collectors.toList()),
+            (a, b) -> a
+        );
+    }
+}
+
+/*
+[1 2] [2 1]
+
+=> add 3 to [1 2] as example
+
+[3 1 2] [1 3 2]  [1 2 3] 
+i = 3
+j = 6
+*/
