@@ -1,0 +1,41 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        int tcnt[] = t.chars().boxed().reduce(
+            new int[256],
+            (a, c) -> {
+                a[c]++;
+                return a;
+            },
+            (x, y) -> x
+        );
+
+        return Stream.of(tcnt)
+            .flatMap(p2 ->
+                Stream.of(
+                    IntStream.range(0, s.length()).boxed().reduce(
+                        new int[260],
+                        (p1, right) -> {
+                            Stream.iterate(
+                                p1[s.charAt(right)]++,
+                                i -> (
+                                    IntStream.range(1, 256).boxed().allMatch(j -> p2[j] <= p1[j]) &&
+                                    (
+                                        (p1[258] == 0 || p1[257] - p1[256] + 1 > right - p1[0] + 1)
+                                            ? ((p1[256] = p1[0]) >= 0) &&
+                                              ((p1[257] = right) >= 0) &&
+                                              ((p1[258] = 1) >= 0)
+                                            : true
+                                    )
+                                ),
+                                i -> p1[s.charAt(p1[0]++)]--
+                            ).forEach(i -> {});
+                            return p1;
+                        },
+                        (x, y) -> x
+                    )
+                ).map(p -> p[258] == 0 ? "" : s.substring(p[256], p[257] + 1))
+            )
+            .min((s1, s2) -> s1.length() - s2.length())
+            .orElse("");
+    }
+}
