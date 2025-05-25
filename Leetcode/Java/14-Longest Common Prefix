@@ -1,0 +1,13 @@
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        return Stream.iterate(0,
+                j -> strs.length > 0 &&
+                     j < strs[0].length() &&
+                     IntStream.range(1, strs.length)
+                              .allMatch(i -> j < strs[i].length() && strs[i].charAt(j) == strs[0].charAt(j)),
+                j -> j + 1)
+            .map(j -> strs[0].charAt(j))
+            .map(String::valueOf)
+            .collect(Collectors.joining());
+    }
+}
