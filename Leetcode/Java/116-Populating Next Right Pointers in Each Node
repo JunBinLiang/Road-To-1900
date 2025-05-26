@@ -1,0 +1,81 @@
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val) {
+        val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+};
+*/
+class Solution {
+    public Node connect(Node root) {
+        return root == null ? root : (
+            Stream.iterate(
+                new ArrayList<>(Arrays.asList(root)),
+                q -> !q.isEmpty(),
+                q -> new ArrayList<>(
+                    IntStream.range(0, 2 * q.size())
+                        .mapToObj(i -> 
+                            (i % 2 == 0)
+                                ? ((i / 2 < q.size() - 1)
+                                    ? ((q.get(i / 2).next = q.get(i / 2 + 1)) == null
+                                        ? q.get(i / 2).left
+                                        : q.get(i / 2).left)
+                                    : q.get(i / 2).left)
+                                : q.get(i / 2).right
+                        )
+                        .filter(node -> node != null)
+                        .collect(Collectors.toList())
+                )
+            ).collect(Collectors.toList()) == null ? root : root
+        );
+    }
+}
+   
+
+/*
+error: local variables referenced from a lambda expression must be final or effectively final
+
+(q = new LinkedList<>(...)) => trying to mutage q
+
+
+class Solution {
+    public Node connect(Node root) {
+        return root == null ? root : (
+            Stream.iterate(
+                new LinkedList<>(Arrays.asList(root)),
+                q -> q.size() == 0 ? false : (
+                    (q = new LinkedList<>(
+                        IntStream.range(0, 2 * q.size())
+                            .mapToObj(i ->
+                                (i % 2 == 0) ? (
+                                    (i / 2 < q.size() - 1) ? (
+                                        ((q.get(i / 2).next = q.get(i / 2 + 1)) == null)
+                                            ? q.get(i / 2).left
+                                            : q.get(i / 2).left
+                                    ) : q.get(i / 2).left
+                                ) : q.get(i / 2).right
+                            )
+                            .filter(node -> node != null)
+                            .collect(Collectors.toList())
+                    )) == null ? true : true
+                ),
+                q -> q
+            ) == null ? root : root
+        );
+    }
+}
+*/
