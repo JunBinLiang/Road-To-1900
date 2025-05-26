@@ -1,0 +1,17 @@
+class Solution {
+    public List<List<Integer>> generate(int n) {
+        return IntStream.range(1, n).boxed().reduce(
+            new ArrayList<>(List.of(new ArrayList<>(List.of(1)))),
+            //Arrays.asList(Arrays.asList(1)) this is immutable list
+            (list, i) -> list.add(
+                IntStream.range(0, i + 1)
+                    .boxed()
+                    .map(j -> (j == 0 || j == i) ? 1 
+                          : list.get(list.size() - 1).get(j - 1) 
+                          + list.get(list.size() - 1).get(j))
+                    .collect(Collectors.toList())
+            ) ? list : list,
+            (x, y) -> x
+        );
+    }
+}
