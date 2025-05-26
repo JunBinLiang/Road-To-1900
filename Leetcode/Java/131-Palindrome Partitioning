@@ -1,3 +1,40 @@
+class Solution {
+    public List<List<String>> partition(String s) {
+        return IntStream.range(0, s.length())
+            .boxed()
+            .<List<List<String>>>reduce(
+                Arrays.asList(new ArrayList<>()),
+                (list, right) -> Stream.concat(
+                    new ArrayList<>(list).stream(),
+                    list.stream()
+                        .map(singlelist -> Stream.concat(
+                                singlelist.stream(),
+                                Stream.of(s.substring(
+                                    singlelist.stream()
+                                        .reduce(0, (sz, t) -> sz + t.length(), (a, b) -> a),
+                                    right + 1
+                                ))
+                            ).collect(Collectors.toList())
+                        )
+                        .filter(l -> l.size() == 0 || (
+                            l.get(l.size() - 1).length() > 0 &&
+                            l.get(l.size() - 1).equals(
+                                new StringBuilder(l.get(l.size() - 1)).reverse().toString()
+                            )
+                        ))
+                ).collect(Collectors.toList()),
+                (x, y) -> x
+            )
+            .stream()
+            .filter(singlelist ->
+                singlelist.stream()
+                    .reduce(0, (sz, t) -> sz + t.length(), (a, b) -> a) == s.length()
+            )
+            .collect(Collectors.toList());
+    }
+}
+
+
 
 class Solution {
     public List<List<String>> partition(String s) {
