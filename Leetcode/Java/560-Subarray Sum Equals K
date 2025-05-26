@@ -1,0 +1,17 @@
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+        return IntStream.range(0, nums.length).boxed().reduce(
+            new HashMap<>(Map.of(1000000000, 0, 0, 1)), // Map.of creates immutable map
+            (map, i) ->
+                map.put(
+                    1000000000,
+                    map.get(1000000000) + map.getOrDefault(
+                        (nums[i] += (i > 0 ? nums[i - 1] : 0)) - k, 0
+                    )
+                ) != null
+                    ? (map.put(nums[i], map.getOrDefault(nums[i], 0) + 1) != null ? map : map)
+                    : map,
+            (x, y) -> x
+        ).get(1000000000);
+    }
+}
