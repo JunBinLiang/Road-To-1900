@@ -1,0 +1,25 @@
+class Solution {
+    public List<String> letterCombinations(String s) {
+        Map<Character, String> map = Map.of(
+            '2', "abc", '3', "def", '4', "ghi",
+            '5', "jkl", '6', "mno", '7', "pqrs",
+            '8', "tuv", '9', "wxyz"
+        );
+
+        return s.length() == 0
+            ? new ArrayList<>()
+            : IntStream.range(0, s.length())
+                .boxed()
+                .reduce(
+                    Arrays.asList(""),
+                    (list, i) -> IntStream
+                        .range(0, list.size() * map.get(s.charAt(i)).length())
+                        .mapToObj(j ->
+                            list.get(j / map.get(s.charAt(i)).length()) +
+                            map.get(s.charAt(i)).charAt(j % map.get(s.charAt(i)).length())
+                        )
+                        .collect(Collectors.toList()),
+                    (x, y) -> x
+                );
+    }
+}
