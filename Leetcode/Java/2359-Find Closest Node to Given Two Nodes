@@ -1,0 +1,35 @@
+class Solution {
+    public int closestMeetingNode(int[] edges, int node1, int node2) {
+        return Stream.of(new Set[][]{{new HashSet<>(), new HashSet<>()}})
+            .flatMap(visit -> Stream.of(
+                Stream.iterate(
+                    new int[]{node1, 0},
+                    p -> p[0] != -1 && ((Set<Integer>) visit[0]).add(p[0]),
+                    p -> new int[]{edges[p[0]], p[1] + 1}
+                ).collect(Collectors.toMap(
+                    p -> p[0],
+                    p -> p[1],
+                    (a, b) -> a,
+                    LinkedHashMap::new
+                ))
+            ).flatMap(mp -> Stream.iterate(
+                Arrays.asList(node2, 0),
+                p -> p.get(0) != -1 && ((Set<Integer>) visit[1]).add(p.get(0)),
+                p -> Arrays.asList(
+                    edges[p.get(0)],
+                    p.get(1) + 1
+                )
+            )
+            .filter(p -> ((Map<Integer, Integer>) mp).containsKey(p.get(0)))
+            .map(p -> Arrays.asList(
+                p.get(0),
+                Math.max(
+                    p.get(1),
+                    ((Map<Integer, Integer>) mp).get(p.get(0))
+                )
+            ))))
+            .min((a, b) -> a.get(1).equals(b.get(1)) ? a.get(0) - b.get(0) : a.get(1) - b.get(1))
+            .orElse(Arrays.asList(-1, -1))
+            .get(0);
+    }
+}
