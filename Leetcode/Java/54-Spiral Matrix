@@ -1,0 +1,32 @@
+class Solution {
+    public List<Integer> spiralOrder(int[][] mat) {
+        return Stream.of(
+            Stream.iterate(
+                new int[]{0, 1, 1, 0, 0, -1, -1, 0, 0, -1, 0, 0, 0},
+                a -> (
+                    a[8] + a[a[10] * 2] >= 0 &&
+                    a[8] + a[a[10] * 2] < mat.length &&
+                    a[9] + a[a[10] * 2 + 1] >= 0 &&
+                    a[9] + a[a[10] * 2 + 1] < mat[0].length &&
+                    mat[a[8] + a[a[10] * 2]][a[9] + a[a[10] * 2 + 1]] != -1000
+                ) ? (
+                    ((a[8] += a[a[10] * 2]) >= 0 &&
+                    (a[9] += a[a[10] * 2 + 1]) >= 0 &&
+                    (a[11] = mat[a[8]][a[9]]) >= -1000 &&
+                    (mat[a[8]][a[9]] = -1000) >= -1000 &&
+                    (a[12]++) >= 0) ? true : true
+                ) : (
+                    (a[12] == mat.length * mat[0].length)
+                        ? false
+                        : ((a[10] = (a[10] + 1) % 4) >= 0)
+                ),
+                a -> Arrays.copyOfRange(a, 0, a.length)
+            ).map(a -> Arrays.asList(a[8], a[9], a[11]))
+             .collect(Collectors.toList())
+        ).flatMap(list ->
+            IntStream.range(0, list.size())
+                .filter(i -> i == 0 || !list.get(i).toString().equals(list.get(i - 1).toString()))
+                .mapToObj(i -> list.get(i).get(2))
+        ).collect(Collectors.toList());
+    }
+}
