@@ -1,0 +1,48 @@
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        return Stream.of(
+            IntStream.range(0, board.length * board.length).boxed().reduce(
+                new int[board.length * board.length],
+                (a, i) ->
+                    ((i / board.length) % 2 == 0)
+                        ? (
+                            (a[i] = board[board.length - i / board.length - 1][i % board.length]) >= -1 ? a : a
+                          )
+                        : (
+                            (a[i] = board[board.length - i / board.length - 1][board.length - i % board.length - 1]) >= -1 ? a : a
+                          ),
+                (x, y) -> x
+            )
+        ).map(mat -> {
+            return Stream.of(
+                IntStream.range(0, mat.length).map(i -> i == 0 ? 0 : -1).toArray()
+            ).map(d -> {
+                Stream.<List<Integer>>iterate(
+                    new ArrayList<>(Arrays.asList(0)),
+                    q -> q.size() > 0,
+                    q ->
+                        IntStream.range(0, q.size()).boxed().flatMap(i ->
+                            IntStream.range(1, 7).boxed().map(j ->
+                                (q.get(i) + j < mat.length)
+                                    ? (
+                                        (mat[q.get(i) + j] == -1)
+                                            ? (
+                                                (d[q.get(i) + j] == -1)
+                                                    ? ((d[q.get(i) + j] = d[q.get(i)] + 1) >= 0 ? q.get(i) + j : q.get(i) + j)
+                                                    : (-1)
+                                              )
+                                            : (
+                                                (d[mat[q.get(i) + j] - 1] == -1)
+                                                    ? ((d[mat[q.get(i) + j] - 1] = d[q.get(i)] + 1) >= 0 ? mat[q.get(i) + j] - 1 : mat[q.get(i) + j] - 1)
+                                                    : (-1)
+                                              )
+                                    )
+                                    : (-1)
+                            )
+                        ).filter(x -> x != -1).collect(Collectors.toList())
+                ).forEach(x -> {});
+                return d;
+            }).collect(Collectors.toList()).get(0)[mat.length - 1];
+        }).max(Integer::compareTo).orElse(-1);
+    }
+}
