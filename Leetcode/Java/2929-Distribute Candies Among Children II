@@ -1,0 +1,32 @@
+class Solution {
+    public long distributeCandies(int n, int limit) {
+        return Stream.of(
+                IntStream.range(0, Math.min(n + 1, limit * 2 + 1))
+                        .map(i ->
+                                (i <= limit)
+                                        ? (1 + Math.min(limit, i))
+                                        : (
+                                                (limit >= i - Math.min(i, limit))
+                                                        ? (Math.min(1 + Math.min(limit, i), limit - (i - Math.min(i, limit)) + 1))
+                                                        : (0)
+                                        )
+                        )
+                        .boxed()
+                        .collect(Collectors.toList())
+        )
+        .map(list ->
+                IntStream.range(0, Math.min(n, limit) + 1)
+                        .boxed()
+                        .reduce(
+                                0L,
+                                (ans, i) -> (n - i >= 0 && n - i < list.size())
+                                        ? (ans + list.get(n - i))
+                                        : (ans + 0),
+                                Long::sum
+                        )
+        )
+        .map(i -> i)
+        .max(Long::compareTo)
+        .orElse(0L);
+    }
+}
