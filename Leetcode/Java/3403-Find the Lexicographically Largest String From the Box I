@@ -1,0 +1,14 @@
+class Solution {
+    public String answerString(String s, int k) {
+        return k == 1 
+            ? s 
+            : IntStream.range(0, s.length())
+                .boxed()
+                .map(i -> s.substring(
+                    i, 
+                    i + Math.min(s.length() - k + 1, s.length() - i)
+                ))
+                .max(String::compareTo)
+                .orElse("");
+    }
+}
