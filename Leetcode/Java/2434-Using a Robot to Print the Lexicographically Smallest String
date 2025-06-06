@@ -1,0 +1,35 @@
+class Solution {
+    public String robotWithString(String s) {
+        return Stream.of(
+            IntStream.range(0, s.length()).boxed().reduce(
+                IntStream.generate(() -> -1).limit(256).toArray(),
+                (a, i) -> (a[s.charAt(i)] = i) >= 0 ? a : a,
+                (x, y) -> x
+            )
+        ).map(p ->
+            IntStream.range(0, s.length()).boxed().reduce(
+                new StringBuilder[]{new StringBuilder(), new StringBuilder()},
+                (stks, i) ->
+                    Stream.iterate(
+                        stks[1].append(s.charAt(i)) == null ? 0 : 0,
+                        v -> (stks[1].length() > 0) &&
+                             (
+                                 (i == s.length() - 1) ||
+                                 (
+                                     IntStream.range(0, stks[1].charAt(stks[1].length() - 1))
+                                              .map(j -> p[j])
+                                              .max()
+                                              .orElse(-1) <= i
+                                 )
+                             ) ? (
+                            stks[0].append(stks[1].charAt(stks[1].length() - 1)) != null ? (
+                                stks[1].deleteCharAt(stks[1].length() - 1) != null ? true : true
+                            ) : true
+                        ) : false,
+                        v -> v
+                    ).count() > 0 ? stks : stks,
+                (x, y) -> x
+            )[0].toString()
+        ).max(String::compareTo).orElse("");
+    }
+}
