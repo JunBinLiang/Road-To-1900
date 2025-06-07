@@ -1,0 +1,35 @@
+class Solution {
+    public String clearStars(String s) {
+        return Stream.of(
+            Stream.of(IntStream.range(0, 26).boxed().reduce(
+                new ArrayList<ArrayList<Integer>>(),
+                (q, i) -> (q.add(new ArrayList<>()) == true) ? q : q,
+                (x, y) -> x
+            )).map(q ->
+                Stream.iterate(
+                    0,
+                    i -> i < s.length(),
+                    i ->
+                        (s.charAt(i) == '*') ? (
+                            Stream.iterate(
+                                0,
+                                j -> j < 26 && j >= 0,
+                                j -> (q.get(j).size() == 0)
+                                    ? (j + 1)
+                                    : ((q.get(j).remove(q.get(j).size() - 1)) != null ? -1 : -1)
+                            ).count() > 0 ? i + 1 : i + 1
+                        ) : (
+                            (q.get(s.charAt(i) - 'a').add(i) == true) ? i + 1 : i + 1
+                        )
+                ).count() > 0 ? q : q
+            ).max((q1, q2) -> q1.toString().compareTo(q2.toString()))
+            .orElse(new ArrayList<>())
+        ).flatMap(q ->
+            IntStream.range(0, 26).boxed().flatMap(
+                i -> q.get(i).stream().map(pos -> new int[]{pos, i + 'a'})
+            )
+        ).sorted((p1, p2) -> p1[0] - p2[0])
+        .map(p -> String.valueOf((char)(p[1])))
+        .collect(Collectors.joining());
+    }
+}
