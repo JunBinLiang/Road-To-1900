@@ -1,0 +1,18 @@
+class Solution {
+    public List<Integer> lexicalOrder(int n) {
+        return Stream.iterate(
+                new int[]{1, 0},
+                p -> p[1] < n,
+                p -> new int[]{
+                    (p[0] * 10 <= n)
+                        ? p[0] * 10
+                        : Stream.iterate(p[0],
+                            x -> (x > n || x % 10 == 9 || x + 1 > n),
+                            x -> ((p[0] /= 10) >= 0) ? (x / 10) : (x / 10)
+                        ).count() >= 0 ? (p[0] + 1) : (p[0] + 1),
+                    p[1] + 1
+                }
+        ).map(p -> p[0])
+         .collect(Collectors.toList());
+    }
+}
