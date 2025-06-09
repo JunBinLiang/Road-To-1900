@@ -1,0 +1,60 @@
+class Solution {
+    int[] tens = new int[]{1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000}; 
+    public int findKthNumber(int n, int k) {
+        return dfs(n, 0, k);
+    }
+ 
+    int dfs(int n, int cur, int k) {
+        if(k == 0) {
+            return cur;
+        }
+
+        for(int i = (cur == 0 ? 1 : 0); i <= 9; i++) {
+            int remain = f(cur * 10 + i, n) + 1;
+            if(k > remain) {
+                k -= remain;
+            } else {
+                return dfs(n, cur * 10 + i, k - 1);
+            }
+        }
+        return -1;
+    }
+
+    public int f(int x, int y) {
+        String s = "" + x, t = "" + y;
+        boolean less = false, greater = false;
+        for(int i = 0; i < s.length(); i++) {
+            if(s.charAt(i) == t.charAt(i)) {
+            } else if(s.charAt(i) > t.charAt(i)) {
+                greater = true;
+                break;
+            } else {
+                less = true;
+            }
+        }
+
+        int len = t.length() - s.length();
+        if((!less) && (!greater)) {
+            //same prefix
+            int sum = 0;
+            for(int i = 1; i < len; i++) {
+                sum += tens[i];
+            }
+            sum += (y - x * tens[len] + 1);
+            return sum;
+        } else if(less) {
+            int sum = 0;
+            for(int i = 1; i <= len; i++) {
+                sum += tens[i];
+            }
+            return sum;
+        } else if(greater) {
+            int sum = 0;
+            for(int i = 1; i < len; i++) {
+                sum += tens[i];
+            }
+            return sum;
+        }
+        return 0;
+    }
+}
