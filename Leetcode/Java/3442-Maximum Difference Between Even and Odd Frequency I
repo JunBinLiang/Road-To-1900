@@ -1,0 +1,22 @@
+class Solution {
+    public int maxDifference(String s) {
+        return Stream.of(
+            IntStream.range(0, s.length()).boxed().reduce(
+                new int[26],
+                (cnt, i) -> (cnt[s.charAt(i) - 'a']++ >= 0) ? cnt : cnt,
+                (x, y) -> x
+            )
+        ).flatMap(cnt ->
+            IntStream.range(0, 26).boxed().flatMap(i ->
+                IntStream.range(0, 26)
+                    .mapToObj(j -> new int[]{i, j, cnt[i], cnt[j]})
+            ).filter(p ->
+                (p[2] > 0 && p[3] > 0) &&
+                (p[0] != p[1]) &&
+                ((p[2] % 2 == 1) && (p[3] % 2 == 0))
+            )
+        ).map(p -> p[2] - p[3])
+         .max(Integer::compare)
+         .orElse(-1);
+    }
+}
