@@ -1,0 +1,27 @@
+class Solution {
+    public int minimizeMax(int[] nums, int p) {
+        return Stream.of(IntStream.of(nums).sorted().toArray()).map(
+            a ->
+                IntStream.range(0, 999).boxed().reduce(
+                    new int[]{0, 1000000000, 0},
+                    (b, i) -> (
+                        (b[1] < b[0]) ? b : (
+                            (
+                                IntStream.range(1, a.length).boxed().reduce(
+                                    new int[a.length],
+                                    (dp, j) ->
+                                        (dp[j] = (a[j] - a[j - 1] <= (b[0] + (b[1] - b[0]) / 2))
+                                            ? Math.max(dp[j - 1], 1 + ((j - 2 >= 0) ? dp[j - 2] : 0))
+                                            : dp[j - 1]) >= 0 ? dp : dp,
+                                    (o, q) -> o
+                                )[a.length - 1] >= p
+                            )
+                                ? new int[]{b[0], (b[0] + (b[1] - b[0]) / 2) - 1, (b[0] + (b[1] - b[0]) / 2)}
+                                : new int[]{(b[0] + (b[1] - b[0]) / 2) + 1, b[1], b[2]}
+                        )
+                    ),
+                    (x, y) -> x
+                )
+        ).map(ans -> ans[2]).collect(Collectors.toList()).get(0);
+    }
+}
