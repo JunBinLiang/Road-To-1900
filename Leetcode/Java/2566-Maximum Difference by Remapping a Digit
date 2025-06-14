@@ -1,0 +1,24 @@
+class Solution {
+    public int minMaxDifference(int num) {
+        return IntStream.range(0, 10).boxed().flatMap(i ->
+            IntStream.range(0, 10).boxed().map(j -> 
+                Integer.parseInt(
+                    IntStream.range(0, ("" + num).length())
+                        .mapToObj(index -> (("" + num).charAt(index) - '0' == i) ? (char) (j + '0') : ("" + num).charAt(index))
+                        .map(String::valueOf)
+                        .collect(Collectors.joining())
+                )
+            )
+        ).max(Integer::compare).orElse(0)
+        - IntStream.range(0, 10).boxed().flatMap(i ->
+            IntStream.range(0, 10).boxed().map(j -> 
+                Integer.parseInt(
+                    IntStream.range(0, ("" + num).length())
+                        .mapToObj(index -> (("" + num).charAt(index) - '0' == i) ? (char) (j + '0') : ("" + num).charAt(index))
+                        .map(String::valueOf)
+                        .collect(Collectors.joining())
+                )
+            )
+        ).min(Integer::compare).orElse(0);
+    }
+}
