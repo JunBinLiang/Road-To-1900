@@ -1,0 +1,12 @@
+class Solution {
+    public int countPermutations(int[] nums) {
+        return (Arrays.stream(nums)
+            .boxed()
+            .filter(x -> x <= nums[0])
+            .collect(Collectors.toList()).size() > 1)
+            ? 0
+            : IntStream.range(1, nums.length)
+                .boxed()
+                .reduce(1, (ans, i) -> (int) ((ans + 0L) * i % 1000000007), (x, y) -> x);
+    }
+}
