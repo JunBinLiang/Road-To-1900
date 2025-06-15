@@ -1,0 +1,11 @@
+class Solution {
+    public int removeElement(int[] nums, int val) {
+        return IntStream.range(0, nums.length).boxed().reduce(
+            0,
+            (index, i) -> (nums[i] != val)
+                ? (((nums[index] = nums[i]) >= 0) ? (index + 1) : (index + 1))
+                : index,
+            (x, y) -> x
+        );
+    }
+}
