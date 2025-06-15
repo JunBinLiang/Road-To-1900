@@ -1,0 +1,14 @@
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+        return Stream.of(Arrays.stream(nums).collect(Collectors.toSet())).flatMap(
+            set ->
+                IntStream.range(0, 1 << (nums.length)).boxed().map(
+                    st ->
+                        IntStream.range(0, nums.length).boxed()
+                            .map(i -> ((st & (1 << i)) > 0 ? '1' : '0'))
+                            .map(String::valueOf)
+                            .collect(Collectors.joining())
+                ).filter(s -> !(set.contains(s)))
+        ).findFirst().orElse(null);
+    }
+}
