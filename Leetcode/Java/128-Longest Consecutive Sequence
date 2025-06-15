@@ -1,0 +1,16 @@
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        return Stream.of(Arrays.stream(nums).boxed().collect(Collectors.toSet()))
+            .flatMap(set ->
+                IntStream.range(0, nums.length).boxed().map(i ->
+                    (!set.contains(nums[i] - 1)) ? (
+                        Stream.iterate(
+                            nums[i],
+                            x -> (set.contains(x) && set.remove(x)),
+                            x -> x + 1
+                        ).collect(Collectors.toList()).size()
+                    ) : (0)
+                )
+            ).max(Integer::compare).orElse(0);
+    }
+}
