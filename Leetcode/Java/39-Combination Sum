@@ -1,0 +1,19 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] nums, int target) {
+        return IntStream.range(0, nums.length).boxed()
+            .<List<List<Integer>>>reduce(
+                Arrays.asList(Arrays.asList()),
+                (ans, i) ->
+                    ans.stream().flatMap(
+                        list -> Stream.<List<Integer>>iterate(
+                            new ArrayList<>(list),
+                            cur -> cur.stream().mapToInt(Integer::intValue).sum() <= target,
+                            cur -> Stream.concat(cur.stream(), Stream.of(nums[i])).collect(Collectors.toList())
+                        )
+                    ).collect(Collectors.toList()),
+                (x, y) -> x
+            ).stream()
+            .filter(l -> l.stream().mapToInt(Integer::intValue).sum() == target)
+            .collect(Collectors.toList());
+    }
+}
