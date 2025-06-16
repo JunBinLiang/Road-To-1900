@@ -1,0 +1,15 @@
+class Solution {
+    public int maximumDifference(int[] nums) {
+        return IntStream.range(0, nums.length)
+            .boxed()
+            .flatMap(i ->
+                IntStream.range(i + 1, nums.length)
+                    .boxed()
+                    .map(j -> new int[]{nums[i], nums[j]})
+            )
+            .filter(p -> p[0] < p[1])
+            .map(p -> p[1] - p[0])
+            .max(Integer::compare)
+            .orElse(-1);
+    }
+}
