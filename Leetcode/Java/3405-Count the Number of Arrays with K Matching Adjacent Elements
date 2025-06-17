@@ -1,0 +1,28 @@
+import java.math.BigInteger;
+class Solution {
+    public int countGoodArrays(int n, int m, int k) {
+        return (int)(((
+            (
+                (
+                    (
+                        IntStream.range(0, n - k - 1).boxed()
+                            .reduce(1, (p, i) -> (int)((p * 1L * (m - 1)) % 1000000007), (x, y) -> x)
+                        * 1L *
+                        IntStream.range(1, n).boxed()
+                            .reduce(1, (p, i) -> (int)((p * 1L * i) % 1000000007), (x, y) -> x)
+                    ) % 1000000007
+                ) * 
+                BigInteger.valueOf(
+                    IntStream.range(1, k + 1).boxed()
+                        .reduce(1, (p, i) -> (int)((p * 1L * i) % 1000000007), (x, y) -> x)
+                ).modInverse(new BigInteger("1000000007")).intValue()
+            ) % 1000000007
+        ) * 
+        BigInteger.valueOf(
+            IntStream.range(1, n - k).boxed()
+                .reduce(1, (p, i) -> (int)((p * 1L * i) % 1000000007), (x, y) -> x)
+        ).modInverse(new BigInteger("1000000007")).intValue()
+        ) % 1000000007
+        * m % 1000000007);
+    }
+}
