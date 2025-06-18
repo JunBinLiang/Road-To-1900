@@ -1,0 +1,16 @@
+class Solution {
+    public int[][] divideArray(int[] nums, int k) {
+        return Stream.of(IntStream.of(nums).sorted().toArray()).map(
+            a -> IntStream.range(0, nums.length / 3)
+                .mapToObj(i -> IntStream.range(0, 3)
+                    .map(j -> a[i * 3 + j])
+                    .toArray())
+                .toArray(int[][]::new)
+        ).filter(ans -> 
+            IntStream.range(0, nums.length / 3)
+                .map(i -> ans[i][2] - ans[i][0])
+                .filter(x -> x > k)
+                .count() == 0
+        ).findFirst().orElse(new int[][]{});
+    }
+}
