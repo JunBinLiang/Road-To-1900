@@ -1,0 +1,13 @@
+class Solution {
+    public int partitionArray(int[] nums, int k) {
+        return Stream.of(IntStream.of(nums).sorted().toArray()).map(
+            a -> IntStream.range(0, a.length).boxed().reduce(
+                new int[]{a[0], 1},
+                (ans, i) -> (a[i] - ans[0] > k) 
+                    ? new int[]{a[i], ans[1] + 1}
+                    : new int[]{ans[0], ans[1]},
+                (x, y) -> x
+            )[1]
+        ).findFirst().orElse(0);
+    }
+}
