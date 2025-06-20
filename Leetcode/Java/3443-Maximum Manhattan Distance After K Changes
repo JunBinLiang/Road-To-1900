@@ -1,0 +1,46 @@
+import java.util.*;
+import java.util.stream.*;
+
+class Solution {
+    public int maxDistance(String s, int k) {
+        return Stream.of(Map.of('N', 1, 'S', -1, 'E', 1, 'W', -1)).map(mp -> 
+            List.of("NE", "NW", "SE", "SW").stream().map(
+                t -> IntStream.range(0, s.length()).boxed().reduce(
+                    new int[]{0, 0, k, 0},
+                    (ans, i) -> (
+                        (s.charAt(i) == t.charAt(0) || s.charAt(i) == t.charAt(1)) && (ans[2] > 0)
+                    ) ? (
+                        s.charAt(i) == t.charAt(0)
+                            ? new int[]{
+                                ans[0] - mp.get(s.charAt(i)), 
+                                ans[1], 
+                                ans[2] - 1, 
+                                Math.max(ans[3], Math.abs(ans[0] - mp.get(s.charAt(i))) + Math.abs(ans[1]))
+                            }
+                            : new int[]{
+                                ans[0], 
+                                ans[1] - mp.get(s.charAt(i)), 
+                                ans[2] - 1, 
+                                Math.max(ans[3], Math.abs(ans[0]) + Math.abs(ans[1] - mp.get(s.charAt(i))))
+                            }
+                    ) : (
+                        (s.charAt(i) == 'N' || s.charAt(i) == 'S')
+                            ? new int[]{
+                                ans[0] + mp.get(s.charAt(i)), 
+                                ans[1], 
+                                ans[2], 
+                                Math.max(ans[3], Math.abs(ans[0] + mp.get(s.charAt(i))) + Math.abs(ans[1]))
+                            }
+                            : new int[]{
+                                ans[0], 
+                                ans[1] + mp.get(s.charAt(i)), 
+                                ans[2], 
+                                Math.max(ans[3], Math.abs(ans[0]) + Math.abs(ans[1] + mp.get(s.charAt(i))))
+                            }
+                    ),
+                    (x, y) -> x
+                )
+            ).map(p -> p[3]).max(Integer::compare).orElse(0)
+        ).collect(Collectors.toList()).get(0);
+    }
+}
