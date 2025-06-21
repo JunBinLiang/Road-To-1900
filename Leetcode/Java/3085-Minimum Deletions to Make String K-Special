@@ -1,0 +1,27 @@
+class Solution {
+    public int minimumDeletions(String s, int k) {
+        return Stream.of(
+                IntStream.range(0, s.length()).boxed().reduce(
+                        new int[26],
+                        (cnt, i) -> {
+                            cnt[s.charAt(i) - 'a']++;
+                            return cnt;
+                        },
+                        (a, b) -> a
+                )
+        ).map(cnt -> IntStream.of(cnt).sorted().toArray())
+         .mapToInt(cnt ->
+             IntStream.range(0, 26)
+                 .map(i ->
+                     IntStream.range(0, 26)
+                         .map(j ->
+                             (cnt[j] < cnt[i]) 
+                                 ? cnt[j] 
+                                 : ((cnt[j] >= cnt[i] + k) 
+                                     ? (cnt[j] - cnt[i] - k) 
+                                     : 0)
+                         ).sum()
+                 ).min().orElse(0)
+         ).boxed().max(Integer::compare).orElse(0);
+    }
+}
