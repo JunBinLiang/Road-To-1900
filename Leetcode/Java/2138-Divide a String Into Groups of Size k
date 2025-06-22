@@ -1,0 +1,14 @@
+class Solution {
+    public String[] divideString(String s, int k, char fill) {
+        return IntStream.range(0, (s.length() / k) + (s.length() % k != 0 ? 1 : 0))
+            .boxed()
+            .map(i ->
+                IntStream.range(0, k)
+                    .boxed()
+                    .map(j -> i * k + j >= s.length() ? fill : s.charAt(i * k + j))
+                    .map(String::valueOf)
+                    .collect(Collectors.joining())
+            )
+            .toArray(String[]::new);
+    }
+}
