@@ -1,0 +1,13 @@
+class Solution {
+    public List<Integer> findKDistantIndices(int[] nums, int key, int k) {
+        return IntStream.range(0, nums.length)
+            .boxed()
+            .filter(i -> 
+                IntStream.range(0, nums.length)
+                    .filter(j -> nums[j] == key && Math.abs(i - j) <= k)
+                    .findAny()
+                    .isPresent()
+            )
+            .collect(Collectors.toList());
+    }
+}
