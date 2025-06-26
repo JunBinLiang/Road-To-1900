@@ -1,0 +1,20 @@
+class Solution {
+    public int longestSubsequence(String s, int k) {
+        return 
+        s.length() < Integer.toBinaryString(k).length() ? s.length() : 
+        IntStream.range(0, s.length() - Integer.toBinaryString(k).length()).boxed().reduce(
+            0,
+            (cnt, i) -> s.charAt(i) == '0' ? cnt + 1 : cnt,
+            (x, y) -> x
+        ) + 
+        (
+            IntStream.range(s.length() - Integer.toBinaryString(k).length(), s.length()).boxed().reduce(
+                0L,
+                (acc, i) -> acc * 2 + s.charAt(i) - '0',
+                (x, y) -> x
+            ) <= k 
+            ? Integer.toBinaryString(k).length() 
+            : Integer.toBinaryString(k).length() - 1
+        );
+    }
+}
