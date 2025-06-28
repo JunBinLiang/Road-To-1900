@@ -1,0 +1,11 @@
+class Solution {
+    public int[] maxSubsequence(int[] nums, int k) {
+        return IntStream.range(0, nums.length)
+            .mapToObj(i -> new int[]{nums[i], i}) 
+            .sorted((a, b) -> b[0] - a[0])         
+            .limit(k)
+            .sorted(Comparator.comparingInt(a -> a[1]))
+            .mapToInt(a -> a[0])
+            .toArray();
+    }
+}
