@@ -1,0 +1,15 @@
+class Solution {
+    public int findLHS(int[] nums) {
+        return Stream.of(IntStream.range(0, nums.length).boxed().reduce(
+            new HashMap<Integer, Integer>(),
+            (mp, i) -> (mp.put(nums[i], mp.getOrDefault(nums[i], 0) + 1) != null) ? mp : mp,
+            (x, y) -> x
+        )).flatMap(
+            mp ->
+            IntStream.range(0, nums.length).boxed().filter(i -> mp.containsKey(nums[i] - 1)).map(
+                i ->
+                mp.get(nums[i]) + mp.get(nums[i] - 1)
+            )
+        ).max(Integer::compareTo).orElse(0);
+    }
+}
