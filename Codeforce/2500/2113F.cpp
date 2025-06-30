@@ -58,7 +58,7 @@ void solve() {
     };
     for (int i = 0; i < N; i++) {
         if (used[i] == 0 && !g[i].empty()) {
-            rt = -1;
+            rt = -1; //从环出发
             find(find, i, -1);
             dfs(dfs, rt, 1);
         }
