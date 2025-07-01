@@ -1,0 +1,8 @@
+class Solution {
+    public int possibleStringCount(String s) {
+        return IntStream.range(1, s.length()).map(
+            i ->
+            s.charAt(i) == s.charAt(i - 1) ? 1 : 0
+        ).sum() + 1;
+    }
+}
