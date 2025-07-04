@@ -1,0 +1,16 @@
+class Solution {
+    public char kthCharacter(long k, int[] ops) {
+        return (char) (
+            IntStream.range(0, Math.min(56, ops.length)).boxed().reduce(
+                new long[]{k, 0},
+                (a, i) -> a[0] <= (1L << (Math.min(56, ops.length) - i - 1)) ? 
+                    new long[]{a[0], a[1]} : 
+                    (ops[(Math.min(56, ops.length) - i - 1)] == 0 ? 
+                        new long[]{a[0] - (1L << (Math.min(56, ops.length) - i - 1)), a[1]} : 
+                        new long[]{a[0] - (1L << (Math.min(56, ops.length) - i - 1)), a[1] + 1}
+                    ),
+                (x, y) -> x
+            )[1] % 26 + 'a'
+        );
+    }
+}
