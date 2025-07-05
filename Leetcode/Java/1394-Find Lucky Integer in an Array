@@ -1,0 +1,11 @@
+class Solution {
+    public int findLucky(int[] a) {
+        return IntStream.range(0, a.length).boxed().map(i ->
+            IntStream.range(0, a.length)
+                .map(j -> a[j])
+                .filter(x -> x == a[i])
+                .map(x -> 1)
+                .sum() == a[i] ? a[i] : -1
+        ).max(Integer::compareTo).orElse(-1);
+    }
+}
