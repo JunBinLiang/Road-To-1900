@@ -1,0 +1,88 @@
+class Solution {
+    List<Integer>[] g;
+    int[] ans;
+    int[][] maxs;
+    public int[] timeTaken(int[][] edges) {
+        g = new ArrayList[edges.length + 1];
+        ans = new int[edges.length + 1];
+        maxs = new int[edges.length + 1][2];
+        
+        for(int i = 0; i < g.length; i++) {
+            g[i] = new ArrayList<>();
+            maxs[i][0] = maxs[i][1] = -1;
+        }
+        for(int[] e : edges) {
+            g[e[0]].add(e[1]);
+            g[e[1]].add(e[0]);
+        }
+        dfs1(-1, 0);
+        dfs2(-1, 0);
+        return ans;
+    }
+
+    public void upd(int[] p, int k) {
+        if(k == -1) {
+            return;
+        }
+        if(p[0] == -1 && p[1] == -1) {
+            p[0] = k;
+            return;
+        }
+        if(p[1] == -1) {
+            p[1] = k;
+            Arrays.sort(p);
+            return;
+        }
+        if(k >= p[0]) {
+            if(k >= p[1]) {
+                p[0] = p[1];
+                p[1] = k;
+            } else {
+                p[0] = k;
+            }
+        }
+    }
+
+    public void dfs1(int pa, int u) {
+        maxs[u][0] = 0;
+        for(int v : g[u]) {
+            if(v == pa) continue;
+            dfs1(u, v);
+            int add = 0;
+            if(v % 2 == 0) add = 2;
+            else add = 1;
+            if(maxs[v][1] != -1) {
+                upd(maxs[u], add + maxs[v][1]);
+            } else {
+                upd(maxs[u], add + maxs[v][0]);
+            }
+        }
+    } 
+
+    public void dfs2(int pa, int u) {
+        if(pa != -1) {
+            int add = 1;
+            if(u % 2 == 0) add = 2;
+            int curMax = maxs[u][0];
+            if(maxs[u][1] != -1) {
+                curMax = maxs[u][1];
+            }
+
+            int pmax = maxs[pa][1];
+            if(maxs[pa][1] == curMax + add) {
+                pmax = maxs[pa][0];
+            }
+
+            if(pa % 2 == 0) pmax += 2;
+            else pmax += 1;
+            ans[u] = Math.max(pmax, curMax);
+            upd(maxs[u], pmax);
+        } else {
+            ans[0] = Math.max(maxs[0][0], maxs[0][1]);
+        }
+        for(int v : g[u]) {
+            if(v == pa) continue;
+            dfs2(u, v);
+        }
+    }
+}
