@@ -1,0 +1,31 @@
+class Solution {
+    public int maximumLength(int[] a, int k) {
+        int n = a.length;
+        int[][] dp = new int[k][k];
+
+        for(int i = 0; i < n; i++) {
+            int[] best = new int[k];
+            for(int j = 0; j < k; j++) {
+                if(dp[a[i] % k][j] != 0) {
+                    best[j] = Math.max(best[j], 1 + dp[a[i] % k][j]);
+                }
+            }
+
+            for(int j = 0; j < k; j++) {
+                dp[j][a[i] % k] = Math.max(dp[j][a[i] % k], best[j]);
+            }
+
+            for(int j = i - 1; j >= 0; j--) {
+                dp[a[j] % k][a[i] % k] = Math.max(dp[a[j] % k][a[i] % k], 2);
+            }
+        }
+
+        int ans = 0;
+        for(int i = 0; i < dp.length; i++) {
+            for(int j = 0; j < dp[0].length; j++) {
+                ans = Math.max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+    }
+}
