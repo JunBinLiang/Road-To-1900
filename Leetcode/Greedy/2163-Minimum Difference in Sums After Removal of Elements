@@ -1,0 +1,42 @@
+class Solution {
+    public long minimumDifference(int[] a) {
+        long ans = 10000000000000000l;
+        PriorityQueue<Integer> minq = new PriorityQueue<>();
+        PriorityQueue<Integer> maxq = new PriorityQueue<>((x, y) -> {
+            return y - x;
+        });
+
+        int n = a.length, k = n / 3;
+        long[] left = new long[n];
+        Arrays.fill(left, 10000000000000000l);
+        long sum = 0;
+        for(int i = 0; i < n; i++) {
+            maxq.add(a[i]);
+            sum += a[i];
+            if(maxq.size() > k) {
+                sum -= maxq.poll();
+            }
+            if(maxq.size() == k) {
+                left[i] = sum;
+            }
+            if(i >= k) left[i] = Math.min(left[i], left[i - 1]);
+        }
+        
+        sum = 0;
+        long rmax = -10000000000000000l;
+        for(int i = n - 1; i >= 0; i--) {
+            sum += a[i];
+            minq.add(a[i]);
+            if(minq.size() > k) {
+                sum -= minq.poll();
+            }
+            if(minq.size() == k) {
+                rmax = Math.max(rmax, sum);
+            }
+            if(i >= k) {
+                ans = Math.min(ans, left[i - 1] - rmax);
+            }
+        }
+        return ans;
+    }
+}
