@@ -1,0 +1,35 @@
+class Solution {
+    public int[][] sortMatrix(int[][] a) {
+        return (IntStream.range(0, a.length)
+                .mapToObj(r -> new int[]{r, 0})
+                .map(p ->
+                        Stream.of(
+                                IntStream.range(0, a.length - p[0])
+                                        .mapToObj(t -> a[p[0] + t][p[1] + t])
+                                        .sorted(Comparator.reverseOrder())
+                                        .collect(Collectors.toList())
+                        ).flatMap(sortList ->
+                                IntStream.range(0, sortList.size())
+                                        .mapToObj(i ->
+                                                a[p[0] + i][p[1] + i] = sortList.get(i)
+                                        )
+                        ).collect(Collectors.toList())
+                ).collect(Collectors.toList()).size() >= 0
+                && IntStream.range(1, a.length)
+                .mapToObj(c -> new int[]{0, c})
+                .map(p ->
+                        Stream.of(
+                                IntStream.range(0, a.length - p[1])
+                                        .mapToObj(t -> a[p[0] + t][p[1] + t])
+                                        .sorted()  // natural order
+                                        .collect(Collectors.toList())
+                        ).flatMap(sortList ->
+                                IntStream.range(0, sortList.size())
+                                        .mapToObj(i ->
+                                                a[p[0] + i][p[1] + i] = sortList.get(i)
+                                        )
+                        ).collect(Collectors.toList())
+                ).collect(Collectors.toList()).size() >= 0
+        ) ? a : a;
+    }
+}
