@@ -1,0 +1,14 @@
+class Solution {
+    public int maxFreqSum(String s) {
+        return Stream.of(
+            IntStream.range(0, s.length()).boxed().reduce(
+                new int[26],
+                (cnt, i) -> (cnt[s.charAt(i) - 'a']++) >= 0 ? cnt : cnt,
+                (x, y) -> x
+            )
+        ).map(
+            cnt -> IntStream.range(0, 26).map(i -> Set.of(0, 4, 8, 14, 20).contains(i) ? cnt[i] : 0).max().orElse(0)
+                 + IntStream.range(0, 26).map(i -> !Set.of(0, 4, 8, 14, 20).contains(i) ? cnt[i] : 0).max().orElse(0)
+        ).collect(Collectors.toList()).get(0);
+    }
+}
