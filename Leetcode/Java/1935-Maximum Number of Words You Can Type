@@ -1,0 +1,7 @@
+class Solution {
+    public int canBeTypedWords(String text, String brokenLetters) {
+        return (int) Arrays.stream(text.split(" "))
+            .filter(s -> brokenLetters.chars().noneMatch(c -> s.indexOf(c) >= 0))
+            .count();
+    }
+}
