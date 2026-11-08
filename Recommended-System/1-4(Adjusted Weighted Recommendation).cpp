@@ -52,7 +52,42 @@ double pearsonCorrelation(const std::vector<double>& ratings1, const std::vector
     return numerator / denominator;
 }
 
-// Prediction function
+// Predicting rating without considering user's average
+double rawRatingPrediction(const std::string& targetUser,
+                          const std::string& targetItem,
+                          const RatingsMap& userRatings) {
+    auto calculateAverage = [](const ItemRatings& ratings) {
+        double sum = 0.0;
+        for (const auto& [_, r] : ratings) sum += r;
+        return sum / ratings.size();
+    };
+
+    const auto& targetMap = userRatings.at(targetUser);
+    double weightedSum = 0.0, sumOfWeights = 0.0;
+
+    for (const auto& [user, ratings] : userRatings) {
+        if (user == targetUser || ratings.count(targetItem) == 0) continue;
+
+        // Find common items
+        std::vector<double> targetVec, otherVec;
+        for (const auto& [item, rating] : targetMap) {
+            if (ratings.count(item)) {
+                targetVec.push_back(rating);
+                otherVec.push_back(ratings.at(item));
+            }
+        }
+        
+        double similarity = pearsonCorrelation(targetVec, otherVec);
+        double rating = ratings.at(targetItem);
+        
+        weightedSum += similarity * rating;
+        sumOfWeights += std::abs(similarity);
+    }
+
+    return (sumOfWeights == 0.0) ? calculateAverage(targetMap) : weightedSum / sumOfWeights;
+}
+
+// Predicting rating considering user's average
 double adjustedWeightedRatingPrediction(const std::string& targetUser,
                                         const std::string& targetItem,
                                         const RatingsMap& userRatings) {
@@ -78,28 +113,32 @@ double adjustedWeightedRatingPrediction(const std::string& targetUser,
             }
         }
         
-        // TODO: Calculate similarity using pearsonCorrelation
         double similarity = pearsonCorrelation(targetVec, otherVec);
-        
-        // TODO: Calculate average rating for this user
         double userAvg = calculateAverage(ratings);
+        double ratingDiff = ratings.at(targetItem) - userAvg;
         
-        // TODO: Calculate ratingDiff as the difference between this user's rating for targetItem and their average
-        weightedSum += similarity * (ratings.at(targetItem) - userAvg);
+        weightedSum += similarity * ratingDiff;
         sumOfWeights += std::abs(similarity);
-        // TODO: Update weightedSum using similarity and ratingDiff
-        // TODO: Update sumOfWeights using similarity
     }
 
-    // Return the predicted rating
     return (sumOfWeights == 0.0) ? targetAvg : targetAvg + (weightedSum / sumOfWeights);
 }
 
 int main() {
     RatingsMap users = readUsersItemsMatrix("../data/user_items_matrix.txt");
     
-    double improved_prediction = adjustedWeightedRatingPrediction("User3", "ItemC", users);
-    std::cout << "Predicted Rating for User3 on ItemC (Weighted Average): " 
-              << improved_prediction << "\n";
+    // Calculate and print the average rating for each user
+    for (const auto& [user, ratings] : users) {
+        double sum = 0.0;
+        for (const auto& [_, rating] : ratings) sum += rating;
+        double avgRating = sum / ratings.size();
+        std::cout << "Average rating for " << user << ": " << avgRating << "\n";
+    }
+    
+    // TODO: Predict and print User3's rating for ItemC with rawRatingPrediction function
+    std :: cout << rawRatingPrediction("User3", "ItemC", users) << std :: endl;
+    // TODO: Predict and print User3's rating for ItemC with adjustedWeightedRatingPrediction function
+    std :: cout << adjustedWeightedRatingPrediction("User3", "ItemC", users) << std :: endl;
+    
     return 0;
 }
